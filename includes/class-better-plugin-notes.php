@@ -115,6 +115,7 @@ class Better_Plugin_Notes {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-better-plugin-notes-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-better-plugin-notes-the-note.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
@@ -157,8 +158,11 @@ class Better_Plugin_Notes {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
-		$this->loader->add_action( 'after_plugin_row', $plugin_admin, 'display_plugin_note' );
+		$this->loader->add_filter( 'manage_plugins_columns', $plugin_admin, 'add_plugin_notes_column' );
+		$this->loader->add_action( 'manage_plugins_custom_column', $plugin_admin, 'display_plugin_note',10, 3 );
 
+		$this->loader->add_action( 'wp_ajax_bpn_form_response', $plugin_admin, 'bpn_form_response');
+		$this->loader->add_action( 'wp_ajax_bpn_delete_response', $plugin_admin, 'bpn_delete_response');
 	}
 
 	/**

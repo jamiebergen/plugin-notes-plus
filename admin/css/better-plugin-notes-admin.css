@@ -2,3 +2,31 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.bpn-note-form-wrapper,
+.bpn-add-note-wrapper {
+    display: none;
+}
+
+#bpn_plugin_notes_col {
+    width: 20%;
+}
+
+.view-icon span {
+    vertical-align: middle;
+}
+
+.bpn-plugin-note span.dashicons {
+    padding-right: 5px;
+}
+.dashicons-info {
+    color: deepskyblue;
+}
+.dashicons-warning {
+    color: red;
+}
+
+.bpn-plugin-note a[target="_blank"] {
+    background: url(../images/external.png) no-repeat 100% 0;
+    padding-right: 13px;
+}

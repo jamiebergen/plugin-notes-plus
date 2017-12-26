@@ -96,15 +96,115 @@ class Better_Plugin_Notes_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/better-plugin-notes-admin.js', array( 'jquery' ), $this->version, false );
+		$params = array (
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'ajax_nonce' => wp_create_nonce( 'bpn_add_plugin_note_form_nonce' ) // this is a unique token to prevent form hijacking
+		);
+		wp_enqueue_script( 'bpn_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/better-plugin-notes-admin.js', array( 'jquery' ), $this->version, false );
+		wp_localize_script( 'bpn_ajax_handle', 'params', $params );
+
+	}
+	
+	public function add_plugin_notes_column( $columns ) {
+		$columns['bpn_plugin_notes_col'] =  esc_html__('Plugin Notes', $this->plugin_name);
+		return $columns;
+	}
+
+	public function get_plugin_unique_id( $plugin_name ) {
+		return '_aaa_plugin_note_' . sanitize_title( $plugin_name );
+	}
+
+	public function display_plugin_note( $column_name, $plugin_file, $plugin_data ) {
+
+		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_data['Name'] );
+		$plugin_note_obj = new Better_Plugin_Notes_The_Note( $plugin_unique_id  );
+
+		$the_plugin_note = $plugin_note_obj->get_plugin_note();
+
+		if ( !$the_plugin_note ) {
+			$the_plugin_note = ''; // placeholder if no plugin note exists
+		}
+
+
+		if ( 'bpn_plugin_notes_col' == $column_name ) {
+
+			// Get plugin notes - if any
+
+			// Show all plugin notes
+
+			// Show additional "+ Add plugin note"
+
+
+			// If it does have a note, show it and include buttons to edit or delete it.
+			if ( $plugin_note_obj->has_plugin_note() ) {
+
+				$the_plugin_note = $plugin_note_obj->get_plugin_note();
+				include( 'partials/plugin-note-markup.php' );
+
+			} else { // If it doesn't have a note yet, provide interface to add one.
+
+				include( 'partials/plugin-note-markup.php' );
+
+			}
+		}
 
 	}
 
-//	public function add_plugin_note() {
-//
-//	}
-	public function display_plugin_note() {
-		include_once( 'partials/plugin-note-markup.php' );
+	public function bpn_form_response() {
+
+		// The $_REQUEST contains all the data sent via ajax
+		if ( isset($_REQUEST) ) {
+
+			// Check nonce and die if any funny business is detected
+			check_ajax_referer( 'bpn_add_plugin_note_form_nonce', 'security' );
+
+			$note = $_REQUEST['note'];
+			$icon = $_REQUEST['icon'];
+
+			// Get the name or id of plugin
+			$noteId = $_REQUEST['noteId'];
+			// Create object and create_plugin_note
+
+			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $noteId );
+
+			if ( $plugin_note_obj->has_plugin_note() ) {
+				$plugin_note_obj->update_plugin_note( $note, $icon );
+			} else {
+				$plugin_note_obj->create_plugin_note( $note, $icon );
+			}
+
+			$processed_note = $plugin_note_obj->get_plugin_note();
+
+			echo $processed_note;
+		}
+
+		// Always die in functions echoing ajax content
+		die();
+
+	}
+
+	public function bpn_delete_response() {
+
+		// The $_REQUEST contains all the data sent via ajax
+		if ( isset($_REQUEST) ) {
+
+			// !!!Check nonce here as well?
+
+			// Get the name or id of plugin
+			$noteId = $_REQUEST['noteId'];
+
+			echo $noteId;
+
+			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $noteId );
+
+			if ( $plugin_note_obj->has_plugin_note() ) {
+				$plugin_note_obj->delete_plugin_note();
+			}
+		}
+
+		// Always die in functions echoing ajax content
+		die();
+
 	}
 
 }
