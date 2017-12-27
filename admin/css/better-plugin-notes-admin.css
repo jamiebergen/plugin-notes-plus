@@ -3,11 +3,12 @@
  * included in this file.
  */
 
-.bpn-note-form-wrapper,
-.bpn-add-note-wrapper {
+.bpn-note-form-wrapper {
     display: none;
 }
-
+.bpn-show-note-wrapper {
+    padding-bottom: 10px;
+}
 #bpn_plugin_notes_col {
     width: 20%;
 }

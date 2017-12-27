@@ -119,38 +119,16 @@ class Better_Plugin_Notes_Admin {
 		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_data['Name'] );
 		$plugin_note_obj = new Better_Plugin_Notes_The_Note( $plugin_unique_id  );
 
-		$the_plugin_note = $plugin_note_obj->get_plugin_note();
-
-		if ( !$the_plugin_note ) {
-			$the_plugin_note = ''; // placeholder if no plugin note exists
-		}
-
 
 		if ( 'bpn_plugin_notes_col' == $column_name ) {
 
-			// Get plugin notes - if any
+			$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
+			include( 'partials/plugin-note-markup.php' );
 
-			// Show all plugin notes
-
-			// Show additional "+ Add plugin note"
-
-
-			// If it does have a note, show it and include buttons to edit or delete it.
-			if ( $plugin_note_obj->has_plugin_note() ) {
-
-				$the_plugin_note = $plugin_note_obj->get_plugin_note();
-				include( 'partials/plugin-note-markup.php' );
-
-			} else { // If it doesn't have a note yet, provide interface to add one.
-
-				include( 'partials/plugin-note-markup.php' );
-
-			}
 		}
-
 	}
 
-	public function bpn_form_response() {
+	public function bpn_add_response() {
 
 		// The $_REQUEST contains all the data sent via ajax
 		if ( isset($_REQUEST) ) {
@@ -161,11 +139,12 @@ class Better_Plugin_Notes_Admin {
 			$note = $_REQUEST['note'];
 			$icon = $_REQUEST['icon'];
 
-			// Get the name or id of plugin
-			$noteId = $_REQUEST['noteId'];
-			// Create object and create_plugin_note
+			// Get the name or id of plugin and note index
+			$pluginId = $_REQUEST['pluginId'];
+			$noteIndex = intval($_REQUEST['previousNoteIndex']) + 1;
 
-			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $noteId );
+			// Create object and create_plugin_note
+			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $pluginId );
 
 			if ( $plugin_note_obj->has_plugin_note() ) {
 				$plugin_note_obj->update_plugin_note( $note, $icon );
@@ -173,9 +152,10 @@ class Better_Plugin_Notes_Admin {
 				$plugin_note_obj->create_plugin_note( $note, $icon );
 			}
 
-			$processed_note = $plugin_note_obj->get_plugin_note();
+			$processed_note = $plugin_note_obj->get_plugin_note( $noteIndex );
 
 			echo $processed_note;
+
 		}
 
 		// Always die in functions echoing ajax content

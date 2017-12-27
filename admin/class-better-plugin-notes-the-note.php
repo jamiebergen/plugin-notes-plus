@@ -42,7 +42,7 @@ class Better_Plugin_Notes_The_Note {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @param    string    $plugin_ref_name       The name of the plugin associated with the note.
+	 * @param    string    $plugin_unique_id      The name of the plugin associated with the note.
 	 */
 	public function __construct( $plugin_unique_id ) {
 
@@ -85,15 +85,44 @@ class Better_Plugin_Notes_The_Note {
 	}
 
 	/**
-	 * Get the plugin note.
+	 * Get a specific plugin note.
 	 *
 	 * @since    1.0.0
 	 */
-	public function get_plugin_note() {
+	public function get_plugin_note( $index ) {
 
-		$note_array = get_option( $this->plugin_unique_id );
-		$processed_note = $this->process_plugin_note( $note_array['note'] );
-		$note_with_icon = '<span class="dashicons '. $note_array['icon'] .'"></span>' . $processed_note;
+		$note_array = get_option( $this->plugin_unique_id )[$index];
+		$note_with_icon = $this->set_up_plugin_note_string( $note_array['note'], $note_array['icon'] );
+		return $note_with_icon;
+	}
+
+	/**
+	 * Get the plugin note or notes.
+	 *
+	 * @since    1.0.0
+	 */
+	public function get_plugin_notes() {
+
+		$notes_array = get_option( $this->plugin_unique_id );
+		$notes_string_array = array();
+
+		if ( is_array($notes_array) ) {
+			foreach( $notes_array as $note_array ) {
+				array_push( $notes_string_array, $this->set_up_plugin_note_string( $note_array['note'], $note_array['icon'] ) );
+			}
+		}
+
+		return $notes_string_array;
+	}
+
+	/**
+	 * Set up a string with the plugin note and meta info.
+	 *
+	 * @since    1.0.0
+	 */
+	protected function set_up_plugin_note_string( $note_text, $icon_class ) {
+		$processed_note = $this->process_plugin_note( $note_text );
+		$note_with_icon = '<span class="dashicons '. $icon_class .'"></span>' . $processed_note;
 		return $note_with_icon;
 	}
 
@@ -105,8 +134,10 @@ class Better_Plugin_Notes_The_Note {
 	 */
 	public function create_plugin_note( $note_text, $icon_class ) {
 
-		$note_array = $this->set_up_plugin_note( $note_text, $icon_class );
-		add_option( $this->plugin_unique_id, $note_array );
+		$notes_array = array();
+		$single_note = $this->set_up_plugin_note_array( $note_text, $icon_class );
+		array_push( $notes_array, $single_note );
+		add_option( $this->plugin_unique_id, $notes_array );
 	}
 
 	/**
@@ -116,8 +147,11 @@ class Better_Plugin_Notes_The_Note {
 	 */
 	public function update_plugin_note( $note_text, $icon_class ) {
 
-		$note_array = $this->set_up_plugin_note( $note_text, $icon_class );
-		update_option( $this->plugin_unique_id, $note_array );
+		$notes_array = get_option( $this->plugin_unique_id );
+		$new_note_array = $this->set_up_plugin_note_array( $note_text, $icon_class );
+		array_push( $notes_array, $new_note_array );
+
+		update_option( $this->plugin_unique_id, $notes_array );
 	}
 
 	/**
@@ -125,7 +159,7 @@ class Better_Plugin_Notes_The_Note {
 	 *
 	 * @since    1.0.0
 	 */
-	protected function set_up_plugin_note( $note_text, $icon_class ) {
+	protected function set_up_plugin_note_array( $note_text, $icon_class ) {
 		$note_array = array();
 		$processed_note = $this->process_plugin_note( $note_text );
 
@@ -154,9 +188,9 @@ class Better_Plugin_Notes_The_Note {
 
 		$sanitized_note = force_balance_tags( wp_kses( $note, $this->allowed_tags ) );
 
-		$formatted_note = wpautop( $sanitized_note );
+		//$formatted_note = wpautop( $sanitized_note );
 
-		$note_with_links = $this->linkify( $formatted_note );
+		$note_with_links = $this->linkify( $sanitized_note );
 
 		return $note_with_links;
 	}

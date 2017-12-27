@@ -7,16 +7,16 @@ jQuery( document ).ready( function( $ ) {
 
     // if there is a plugin note, show it and edit | delete
     // if there is not a plugin note, show Add plugin note +
-    $.each( $('.bpn-wrapper'), function() {
-        var pluginId = $(this).attr('id');
-        var note = $('#' + pluginId + ' .bpn-plugin-note').text().trim();
-
-        if ( 0 === note.length ) {
-            $('#' + pluginId + ' .bpn-add-note-wrapper').show();
-            $('#' + pluginId + ' .bpn-show-note-wrapper').hide();
-        }
-
-    });
+    // $.each( $('.bpn-wrapper'), function() {
+    //     var pluginId = $(this).attr('id');
+    //     var note = $('#' + pluginId + ' .bpn-plugin-note').text().trim();
+    //
+    //     if ( 0 === note.length ) {
+    //         $('#' + pluginId + ' .bpn-add-note-wrapper').show();
+    //         $('#' + pluginId + ' .bpn-show-note-wrapper').hide();
+    //     }
+    //
+    // });
 
     // Preview dashicon corresponding to selected note type
     $.each( $('.select-dashicon-for-note'), function() {
@@ -46,27 +46,40 @@ jQuery( document ).ready( function( $ ) {
 
         event.preventDefault();
 
+        // Get plugin ID and basic info for new note
         var pluginId = $(this).closest('.bpn-wrapper').attr('id');
         var noteContent = $(this).siblings('.bpn-note-form').val();
         var noteIcon = $(this).siblings().find('.select-dashicon-for-note').val();
+
+        // Get index for new note
+        var previousNote = $(this).closest('.bpn-wrapper').find('.bpn-show-note-wrapper');
+        var previousNoteIndex = -1;
+        if ( previousNote.length ) {
+            var lastNoteId = $(this).closest('.bpn-wrapper').find('.bpn-show-note-wrapper').last().attr('id');
+            previousNoteIndex = parseInt( lastNoteId.substr(lastNoteId.length - 1) );
+        }
+        var currentNoteIndex = previousNoteIndex + 1;
 
         // This does the ajax request
         $.ajax({
             url: params.ajaxurl,
             data: {
-                'action': 'bpn_form_response',
+                'action': 'bpn_add_response',
                 'note' : noteContent,
                 'icon' : noteIcon,
-                'noteId' : pluginId,
+                'pluginId' : pluginId,
+                'previousNoteIndex' : previousNoteIndex,
 				'security' : params.ajax_nonce
             },
             success:function( response ) {
-                // This outputs the result of the ajax request
+                // Reset add note form
+                $('#' + pluginId + ' .bpn-note-form-wrapper').hide();
+                $('#' + pluginId + ' .bpn-add-note').show();
 
-                $('#' + pluginId + ' .bpn-add-note-wrapper').hide();
-                $('#' + pluginId + ' .bpn-plugin-note').html( response );
-                $('#' + pluginId + ' .bpn-show-note-wrapper').show();
-                // add target blank to a tags
+                // Add new note with markup as the last note
+                $(singleNoteMarkup( response, pluginId, currentNoteIndex )).insertBefore('#' + pluginId + ' .bpn-add-note-wrapper');
+
+                // Add target blank to a tags
                 $('#' + pluginId + ' .bpn-plugin-note a').attr( 'target', '_blank' );;
 
             },
@@ -75,6 +88,18 @@ jQuery( document ).ready( function( $ ) {
             }
         });
     });
+
+    function singleNoteMarkup( $note, $pluginId, $index ) {
+
+        var markup = '';
+        markup += '<div class="bpn-show-note-wrapper" id="' + $pluginId + '-' + $index + '">';
+        markup += '<div class="bpn-plugin-note">' + $note + '</div>';
+        markup += '<a href="#" class="bpn-edit-note">edit</a> | ';
+        markup += '<a href="#" class="bpn-delete-note">delete</a>';
+        markup += '</div>';
+
+        return markup;
+    }
 
     $('.bpn-edit-note').click( function( event ) {
 

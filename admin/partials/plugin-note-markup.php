@@ -16,14 +16,22 @@ if ( current_user_can('install_plugins') ) {
 	?>
 	<div class="bpn-wrapper" id="<?php echo $plugin_unique_id; ?>">
 
-        <div class="bpn-show-note-wrapper">
-            <div class="bpn-plugin-note">
-		        <?php echo $the_plugin_note; ?>
-            </div>
-
-            <a href="#" class="bpn-edit-note">edit</a> |
-            <a href="#" class="bpn-delete-note">delete</a>
-        </div>
+        <?php
+        $note_index = 0;
+        if ( $the_plugin_notes ) { // Show any existing plugin notes
+	        foreach ( $the_plugin_notes as $the_plugin_note ) { ?>
+                <div class="bpn-show-note-wrapper" id="<?php echo $plugin_unique_id . '-' . $note_index; ?>">
+                    <div class="bpn-plugin-note">
+				        <?php echo $the_plugin_note; ?>
+                    </div>
+                    <a href="#" class="bpn-edit-note">edit</a> |
+                    <a href="#" class="bpn-delete-note">delete</a>
+                </div>
+		        <?php
+		        $note_index++;
+            }
+        }
+        ?>
 
 		<div class="bpn-add-note-wrapper">
 			<a href="#" class="bpn-add-note">+ Add plugin note</a>
