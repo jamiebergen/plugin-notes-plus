@@ -5,6 +5,7 @@
 
 .bpn-note-form-wrapper {
     display: none;
+    padding-bottom: 12px;
 }
 .bpn-show-note-wrapper {
     padding-bottom: 10px;
@@ -12,7 +13,9 @@
 #bpn_plugin_notes_col {
     width: 20%;
 }
-
+.bpn-add-note {
+    font-size: 11px;
+}
 .view-icon span {
     vertical-align: middle;
 }

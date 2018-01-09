@@ -119,10 +119,10 @@ class Better_Plugin_Notes_Admin {
 		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_data['Name'] );
 		$plugin_note_obj = new Better_Plugin_Notes_The_Note( $plugin_unique_id  );
 
-
 		if ( 'bpn_plugin_notes_col' == $column_name ) {
 
 			$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
+			ksort($the_plugin_notes);
 			include( 'partials/plugin-note-markup.php' );
 
 		}
@@ -138,23 +138,28 @@ class Better_Plugin_Notes_Admin {
 
 			$note = $_REQUEST['note'];
 			$icon = $_REQUEST['icon'];
-
-			// Get the name or id of plugin and note index
 			$pluginId = $_REQUEST['pluginId'];
-			$noteIndex = intval($_REQUEST['previousNoteIndex']) + 1;
+
+			$index = $_REQUEST['index'];
 
 			// Create object and create_plugin_note
 			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $pluginId );
 
-			if ( $plugin_note_obj->has_plugin_note() ) {
-				$plugin_note_obj->update_plugin_note( $note, $icon );
+			if ($index !== '') {
+				$new_note_index = $plugin_note_obj->edit_plugin_note( $note, $icon, $index );
+			} elseif ( $plugin_note_obj->has_plugin_note() ) {
+				$new_note_index = $plugin_note_obj->append_plugin_note( $note, $icon );
 			} else {
-				$plugin_note_obj->create_plugin_note( $note, $icon );
+				$new_note_index = $plugin_note_obj->initialize_plugin_notes( $note, $icon );
 			}
 
-			$processed_note = $plugin_note_obj->get_plugin_note( $noteIndex );
+			$processed_note = $plugin_note_obj->get_plugin_note( $new_note_index );
 
-			echo $processed_note;
+			$return = array(
+				'new_note_index'  => $new_note_index,
+				'processed_note'  => $processed_note
+			);
+			wp_send_json($return);
 
 		}
 
@@ -170,15 +175,13 @@ class Better_Plugin_Notes_Admin {
 
 			// !!!Check nonce here as well?
 
-			// Get the name or id of plugin
-			$noteId = $_REQUEST['noteId'];
+			$pluginId = $_REQUEST['pluginId'];
+			$noteIndex = $_REQUEST['noteIndex'];
 
-			echo $noteId;
-
-			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $noteId );
+			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $pluginId );
 
 			if ( $plugin_note_obj->has_plugin_note() ) {
-				$plugin_note_obj->delete_plugin_note();
+				$plugin_note_obj->delete_plugin_note( $noteIndex );
 			}
 		}
 

@@ -107,11 +107,11 @@ class Better_Plugin_Notes_The_Note {
 		$notes_string_array = array();
 
 		if ( is_array($notes_array) ) {
-			foreach( $notes_array as $note_array ) {
-				array_push( $notes_string_array, $this->set_up_plugin_note_string( $note_array['note'], $note_array['icon'] ) );
+			foreach( $notes_array as $index => $note_array ) {
+				$notes_string_array[$index] = $this->set_up_plugin_note_string( $note_array['note'], $note_array['icon'] );
+				//array_push( $notes_string_array, $this->set_up_plugin_note_string( $note_array['note'], $note_array['icon'] ) );
 			}
 		}
-
 		return $notes_string_array;
 	}
 
@@ -121,6 +121,7 @@ class Better_Plugin_Notes_The_Note {
 	 * @since    1.0.0
 	 */
 	protected function set_up_plugin_note_string( $note_text, $icon_class ) {
+
 		$processed_note = $this->process_plugin_note( $note_text );
 		$note_with_icon = '<span class="dashicons '. $icon_class .'"></span>' . $processed_note;
 		return $note_with_icon;
@@ -128,30 +129,55 @@ class Better_Plugin_Notes_The_Note {
 
 
 	/**
-	 * Create a new plugin note.
+	 * Create a new database entry and add the plugin's first note.
 	 *
 	 * @since    1.0.0
 	 */
-	public function create_plugin_note( $note_text, $icon_class ) {
+	public function initialize_plugin_notes( $note_text, $icon_class ) {
 
 		$notes_array = array();
 		$single_note = $this->set_up_plugin_note_array( $note_text, $icon_class );
-		array_push( $notes_array, $single_note );
+
+		$note_index = time();
+		// !!! add random num at end of time to ensure that two entries at the same time won't overlap
+		$notes_array[$note_index] = $single_note;
+
 		add_option( $this->plugin_unique_id, $notes_array );
+		return $note_index;
 	}
 
 	/**
-	 * Update the plugin note.
+	 * Append additional notes to a plugin's existing entry.
 	 *
 	 * @since    1.0.0
 	 */
-	public function update_plugin_note( $note_text, $icon_class ) {
+	public function append_plugin_note( $note_text, $icon_class ) {
 
 		$notes_array = get_option( $this->plugin_unique_id );
 		$new_note_array = $this->set_up_plugin_note_array( $note_text, $icon_class );
-		array_push( $notes_array, $new_note_array );
+
+		$note_index = time();
+		$notes_array[$note_index] = $new_note_array;
 
 		update_option( $this->plugin_unique_id, $notes_array );
+		return $note_index;
+	}
+
+	/**
+	 * Edit an existing plugin note.
+	 *
+	 * @since    1.0.0
+	 */
+	public function edit_plugin_note( $note_text, $icon_class, $note_index ) {
+
+		$notes_array = get_option( $this->plugin_unique_id );
+		$edited_note_array = $this->set_up_plugin_note_array( $note_text, $icon_class );
+
+		$notes_array[$note_index] = $edited_note_array;
+
+		update_option( $this->plugin_unique_id, $notes_array );
+
+		return $note_index;
 	}
 
 	/**
@@ -160,6 +186,7 @@ class Better_Plugin_Notes_The_Note {
 	 * @since    1.0.0
 	 */
 	protected function set_up_plugin_note_array( $note_text, $icon_class ) {
+
 		$note_array = array();
 		$processed_note = $this->process_plugin_note( $note_text );
 
@@ -174,9 +201,17 @@ class Better_Plugin_Notes_The_Note {
 	 *
 	 * @since    1.0.0
 	 */
-	public function delete_plugin_note() {
+	public function delete_plugin_note( $index ) {
 
-		delete_option( $this->plugin_unique_id );
+		$notes_array = get_option( $this->plugin_unique_id );
+		unset( $notes_array[$index] );
+		update_option( $this->plugin_unique_id, $notes_array );
+
+		// Delete entire entry if the last note has been deleted
+		if ( empty($notes_array) ) {
+			delete_option( $this->plugin_unique_id );
+		}
+
 	}
 
 	/**
@@ -252,7 +287,7 @@ class Better_Plugin_Notes_The_Note {
 			}
 		}
 
-		// Insert all link
+		// Insert all links
 		return preg_replace_callback( '/<(\d+)>/', function ( $match ) use ( &$links ) {
 			return $links[ $match[1] - 1 ];
 		}, $value );
