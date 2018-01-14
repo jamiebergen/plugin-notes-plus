@@ -7,11 +7,14 @@
     display: none;
     padding-bottom: 12px;
 }
+.bpn-note-form {
+    display: block;
+    width: 250px;
+    height: 100px;
+    margin-top: 5px;
+}
 .bpn-show-note-wrapper {
     padding-bottom: 10px;
-}
-#bpn_plugin_notes_col {
-    width: 20%;
 }
 .bpn-add-note {
     font-size: 11px;
@@ -30,7 +33,9 @@
     color: red;
 }
 
-.bpn-plugin-note a[target="_blank"] {
-    background: url(../images/external.png) no-repeat 100% 0;
-    padding-right: 13px;
+.bpn-plugin-note a[target="_blank"]:after {
+    content: "\f504";
+    font-family: dashicons;
+    padding-left: 3px;
+    position: absolute;
 }
