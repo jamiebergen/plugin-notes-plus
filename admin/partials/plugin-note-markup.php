@@ -23,8 +23,8 @@ if ( current_user_can('activate_plugins') ) {
                     <div class="bpn-plugin-note">
 				        <?php echo $the_plugin_note; ?>
                     </div>
-                    <a href="#" class="bpn-edit-note">edit</a> |
-                    <a href="#" class="bpn-delete-note">delete</a>
+                    <a href="#" class="bpn-edit-note"><?php _e( 'edit', $this->plugin_name ) ?></a> |
+                    <a href="#" class="bpn-delete-note"><?php _e( 'delete', $this->plugin_name ) ?></a>
                 </div>
 		        <?php
             }
@@ -32,24 +32,24 @@ if ( current_user_can('activate_plugins') ) {
         ?>
 
 		<div class="bpn-add-note-wrapper">
-			<a href="#" class="bpn-add-note">+ Add plugin note</a>
+			<a href="#" class="bpn-add-note"><?php _e( '+ Add plugin note', $this->plugin_name ) ?></a>
 			<div class="bpn-note-form-wrapper">
 
                 <label>
                     Note type:
                     <span class="view-icon"></span>
                     <select id="<?php echo $plugin_unique_id; ?>" class="select-dashicon-for-note">
-                        <option value="dashicons-clipboard">Note</option>
-                        <option value="dashicons-info">Info</option>
-                        <option value="dashicons-admin-links">Link</option>
-                        <option value="dashicons-warning">Warning</option>
-                        <option value="dashicons-admin-network">Key</option>
-                        <option value="dashicons-yes">Checkmark</option>
+                        <option value="dashicons-clipboard"><?php _e( 'Note', $this->plugin_name ) ?></option>
+                        <option value="dashicons-info"><?php _e( 'Info', $this->plugin_name ) ?></option>
+                        <option value="dashicons-admin-links"><?php _e( 'Link', $this->plugin_name ) ?></option>
+                        <option value="dashicons-warning"><?php _e( 'Warning', $this->plugin_name ) ?></option>
+                        <option value="dashicons-admin-network"><?php _e( 'Key', $this->plugin_name ) ?></option>
+                        <option value="dashicons-yes"><?php _e( 'Checkmark', $this->plugin_name ) ?></option>
                     </select>
                 </label>
                 <textarea class="bpn-note-form"></textarea>
-				<a href="#" class="bpn-save-note">Save note</a> |
-                <a href="#" class="bpn-cancel-note">Cancel</a>
+				<a href="#" class="bpn-save-note"><?php _e( 'Save note', $this->plugin_name ) ?></a> |
+                <a href="#" class="bpn-cancel-note"><?php _e( 'Cancel', $this->plugin_name ) ?></a>
 				<div id="bpn_form_feedback"></div>
 			</div>
 		</div>

@@ -159,8 +159,8 @@ jQuery( document ).ready( function( $ ) {
         var markup = '';
         markup += '<div class="bpn-show-note-wrapper" id="' + pluginId + '-' + index + '">';
         markup += '<div class="bpn-plugin-note">' + note + '</div>';
-        markup += '<a href="#" class="bpn-edit-note">edit</a> | ';
-        markup += '<a href="#" class="bpn-delete-note">delete</a>';
+        markup += '<a href="#" class="bpn-edit-note">' + params.edit_text + '</a> | ';
+        markup += '<a href="#" class="bpn-delete-note">' + params.delete_text + '</a>';
         markup += '</div>';
 
         return markup;

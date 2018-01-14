@@ -98,7 +98,9 @@ class Better_Plugin_Notes_Admin {
 
 		$params = array (
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'ajax_nonce' => wp_create_nonce( 'bpn_add_plugin_note_form_nonce' ) // this is a unique token to prevent form hijacking
+			'ajax_nonce' => wp_create_nonce( 'bpn_add_plugin_note_form_nonce' ), // this is a unique token to prevent form hijacking
+			'edit_text' => esc_html__( 'edit', $this->plugin_name ),
+			'delete_text' => esc_html__( 'delete', $this->plugin_name )
 		);
 		wp_enqueue_script( 'bpn_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/better-plugin-notes-admin.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( 'bpn_ajax_handle', 'params', $params );
