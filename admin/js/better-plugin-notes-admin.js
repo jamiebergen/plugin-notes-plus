@@ -7,24 +7,26 @@ jQuery( document ).ready( function( $ ) {
 
     function deleteNote( pluginId, noteId, noteIndex ) {
 
-        // This does the ajax request
-        $.ajax({
-            url: params.ajaxurl,
-            data: {
-                'action': 'bpn_delete_response',
-                'pluginId' : pluginId,
-                'noteIndex' : noteIndex
-            },
-            success:function( data ) {
-                // This outputs the result of the ajax request
+        if (confirm(params.confirm_delete)) {
+            // This does the ajax request
+            $.ajax({
+                url: params.ajaxurl,
+                data: {
+                    'action': 'bpn_delete_response',
+                    'pluginId' : pluginId,
+                    'noteIndex' : noteIndex
+                },
+                success:function( data ) {
+                    // This outputs the result of the ajax request
+                    $('#' + noteId + '.bpn-show-note-wrapper').remove();
 
-                $('#' + noteId + '.bpn-show-note-wrapper').remove();
-
-            },
-            error: function( errorThrown ){
-                console.log( errorThrown );
-            }
-        });
+                },
+                error: function( errorThrown ){
+                    console.log( errorThrown );
+                }
+            });
+        }
+        return false;
     }
 
     function editNote( noteContent, noteIcon, noteToEdit ) {
