@@ -12,7 +12,7 @@
  * @subpackage Better_Plugin_Notes/admin/partials
  */
 
-if ( current_user_can('install_plugins') ) {
+if ( current_user_can('activate_plugins') ) {
 	?>
 	<div class="bpn-wrapper" id="<?php echo $plugin_unique_id; ?>">
 

@@ -161,6 +161,9 @@ class Better_Plugin_Notes {
 		$this->loader->add_filter( 'manage_plugins_columns', $plugin_admin, 'add_plugin_notes_column' );
 		$this->loader->add_action( 'manage_plugins_custom_column', $plugin_admin, 'display_plugin_note',10, 3 );
 
+		$this->loader->add_filter( 'manage_plugins-network_columns', $plugin_admin, 'add_plugin_notes_column' );
+		$this->loader->add_action( 'manage_plugins-network_custom_column', $plugin_admin, 'display_plugin_note',10, 3 );
+
 		$this->loader->add_action( 'wp_ajax_bpn_add_response', $plugin_admin, 'bpn_add_response');
 		$this->loader->add_action( 'wp_ajax_bpn_delete_response', $plugin_admin, 'bpn_delete_response');
 	}

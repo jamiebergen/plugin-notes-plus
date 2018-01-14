@@ -114,7 +114,7 @@ class Better_Plugin_Notes_Admin {
 		return '_aaa_plugin_note_' . sanitize_title( $plugin_name );
 	}
 
-	public function display_plugin_note( $column_name, $plugin_file, $plugin_data ) {
+	public function display_plugin_note( $column_name, $plugin_file, $plugin_data ) { // !!! use $plugin_file since it's unique path
 
 		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_data['Name'] );
 		$plugin_note_obj = new Better_Plugin_Notes_The_Note( $plugin_unique_id  );
