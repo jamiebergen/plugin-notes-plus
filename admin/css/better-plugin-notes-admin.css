@@ -3,13 +3,16 @@
  * included in this file.
  */
 
+#bpn_plugin_notes_col {
+    width: 20%;
+}
 .bpn-note-form-wrapper {
     display: none;
     padding-bottom: 12px;
 }
 .bpn-note-form {
     display: block;
-    width: 250px;
+    width: 200px;
     height: 100px;
     margin-top: 5px;
 }
