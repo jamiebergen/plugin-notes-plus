@@ -36,7 +36,7 @@ if ( current_user_can('activate_plugins') ) {
 			<div class="bpn-note-form-wrapper">
 
                 <label>
-                    Note type:
+	                <?php esc_html_e( 'Note type:', $this->plugin_name ) ?>
                     <span class="view-icon"></span>
                     <select id="<?php echo $plugin_unique_id; ?>" class="select-dashicon-for-note">
                         <option value="dashicons-clipboard"><?php esc_html_e( 'Note', $this->plugin_name ) ?></option>
