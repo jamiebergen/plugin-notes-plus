@@ -221,7 +221,7 @@ class Better_Plugin_Notes_The_Note {
 	 */
 	protected function process_plugin_note( $note ) {
 
-		$sanitized_note = force_balance_tags( wp_kses( $note, $this->allowed_tags ) );
+		$sanitized_note = stripslashes( force_balance_tags( wp_kses( $note, $this->allowed_tags ) ) );
 
 		//$formatted_note = wpautop( $sanitized_note );
 

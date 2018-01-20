@@ -83,7 +83,7 @@ jQuery( document ).ready( function( $ ) {
 
         // Get plugin ID and basic info for new note
         var pluginId = $(this).closest('.bpn-wrapper').attr('id');
-        var noteContent = $(this).siblings('.bpn-note-form').val();
+        var noteContent = $(this).siblings('.bpn-note-form').val(); // !!! is this losing markup?
         var noteIcon = $(this).siblings().find('.select-dashicon-for-note').val();
 
         // Get existing note index if available (for case of edit)
@@ -157,6 +157,8 @@ jQuery( document ).ready( function( $ ) {
     });
 
     function singleNoteMarkup( note, pluginId, index ) {
+
+        note = note.replace(/\n/g, "<br />"); // maintain line breaks
 
         var markup = '';
         markup += '<div class="bpn-show-note-wrapper" id="' + pluginId + '-' + index + '">';

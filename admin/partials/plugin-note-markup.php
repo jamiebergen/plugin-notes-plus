@@ -21,7 +21,7 @@ if ( current_user_can('activate_plugins') ) {
 	        foreach ( $the_plugin_notes as $note_index => $the_plugin_note ) { ?>
                 <div class="bpn-show-note-wrapper" id="<?php echo $plugin_unique_id . '-' . $note_index; ?>">
                     <div class="bpn-plugin-note">
-				        <?php echo $the_plugin_note; ?>
+				        <?php echo nl2br( $the_plugin_note ); ?>
                     </div>
                     <a href="#" class="bpn-edit-note"><?php esc_html_e( 'edit', $this->plugin_name ) ?></a> |
                     <a href="#" class="bpn-delete-note"><?php esc_html_e( 'delete', $this->plugin_name ) ?></a>

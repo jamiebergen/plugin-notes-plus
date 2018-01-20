@@ -4,7 +4,8 @@
  */
 
 #bpn_plugin_notes_col {
-    width: 20%;
+    width: 200px;
+    text-align: left;
 }
 .bpn-note-form-wrapper {
     display: none;
