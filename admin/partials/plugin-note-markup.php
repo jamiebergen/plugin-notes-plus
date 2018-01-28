@@ -17,20 +17,27 @@ if ( current_user_can('activate_plugins') ) {
 	<div class="bpn-wrapper" id="<?php echo $plugin_unique_id; ?>">
 
         <?php
-        if ( $the_plugin_notes ) { // Show any existing plugin notes !!! Need to sort to ensure correct order
+        if ( $the_plugin_notes ) {
 	        foreach ( $the_plugin_notes as $note_index => $the_plugin_note ) { ?>
                 <div class="bpn-show-note-wrapper" id="<?php echo $plugin_unique_id . '-' . $note_index; ?>">
                     <div class="bpn-plugin-note">
-				        <?php echo nl2br( $the_plugin_note ); ?>
+                        <span class="dashicons <?php echo $the_plugin_note['icon'] ?>"></span><?php echo nl2br( $the_plugin_note[ 'note' ] ); ?>
                     </div>
                     <a href="#" class="bpn-edit-note"><?php esc_html_e( 'edit', $this->plugin_name ) ?></a> |
                     <a href="#" class="bpn-delete-note"><?php esc_html_e( 'delete', $this->plugin_name ) ?></a>
                 </div>
+                <script>
+                    registerPluginNote( "<?php echo $plugin_unique_id; ?>",
+                                        "<?php echo $note_index; ?>",
+                                        "<?php echo str_replace("\n", '\n', $the_plugin_note['note']); ?>",
+                                        "<?php echo $the_plugin_note['icon']; ?>",
+                    );
+
+                </script>
 		        <?php
             }
         }
         ?>
-
 		<div class="bpn-add-note-wrapper">
 			<a href="#" class="bpn-add-note"><?php esc_html_e( '+ Add plugin note', $this->plugin_name ) ?></a>
 			<div class="bpn-note-form-wrapper">

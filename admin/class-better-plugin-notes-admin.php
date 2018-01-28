@@ -101,7 +101,8 @@ class Better_Plugin_Notes_Admin {
 			'ajax_nonce' => wp_create_nonce( 'bpn_add_plugin_note_form_nonce' ), // this is a unique token to prevent form hijacking
 			'edit_text' => esc_html__( 'edit', $this->plugin_name ),
 			'delete_text' => esc_html__( 'delete', $this->plugin_name ),
-			'confirm_delete' => esc_html__( 'Are you sure you want to delete this note?', $this->plugin_name )
+			'confirm_delete' => esc_html__( 'Are you sure you want to delete this note?', $this->plugin_name ),
+			'needs_content' => esc_html__( 'The note must contain content.', $this->plugin_name ),
 		);
 		wp_enqueue_script( 'bpn_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/better-plugin-notes-admin.js', array( 'jquery' ), $this->version, false );
 		wp_localize_script( 'bpn_ajax_handle', 'params', $params );
@@ -113,13 +114,13 @@ class Better_Plugin_Notes_Admin {
 		return $columns;
 	}
 
-	public function get_plugin_unique_id( $plugin_name ) {
-		return '_aaa_plugin_note_' . sanitize_title( $plugin_name );
+	public function get_plugin_unique_id( $plugin_file ) {
+		return '_aaa_plugin_note_' . sanitize_title( $plugin_file ); // !!! remove _aaa when done testing
 	}
 
-	public function display_plugin_note( $column_name, $plugin_file, $plugin_data ) { // !!! use $plugin_file since it's unique path
+	public function display_plugin_note( $column_name, $plugin_file, $plugin_data ) {
 
-		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_data['Name'] );
+		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_file );
 		$plugin_note_obj = new Better_Plugin_Notes_The_Note( $plugin_unique_id  );
 
 		if ( 'bpn_plugin_notes_col' == $column_name ) {
@@ -145,22 +146,25 @@ class Better_Plugin_Notes_Admin {
 
 			$index = $_REQUEST['index'];
 
+			$user = wp_get_current_user()->display_name;
+
 			// Create object and create_plugin_note
 			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $pluginId );
 
 			if ($index !== '') {
-				$new_note_index = $plugin_note_obj->edit_plugin_note( $note, $icon, $index );
+				$new_note_index = $plugin_note_obj->edit_plugin_note( $note, $icon, $index, $user );
 			} elseif ( $plugin_note_obj->has_plugin_note() ) {
-				$new_note_index = $plugin_note_obj->append_plugin_note( $note, $icon );
+				$new_note_index = $plugin_note_obj->append_plugin_note( $note, $icon, $user );
 			} else {
-				$new_note_index = $plugin_note_obj->initialize_plugin_notes( $note, $icon );
+				$new_note_index = $plugin_note_obj->initialize_plugin_notes( $note, $icon, $user );
 			}
 
 			$processed_note = $plugin_note_obj->get_plugin_note( $new_note_index );
 
 			$return = array(
 				'new_note_index'  => $new_note_index,
-				'processed_note'  => $processed_note
+				'note_icon'       => $processed_note['icon'],
+				'processed_note'  => $processed_note['note']
 			);
 			wp_send_json($return);
 
@@ -176,7 +180,8 @@ class Better_Plugin_Notes_Admin {
 		// The $_REQUEST contains all the data sent via ajax
 		if ( isset($_REQUEST) ) {
 
-			// !!!Check nonce here as well?
+			// Check nonce and die if any funny business is detected
+			check_ajax_referer( 'bpn_add_plugin_note_form_nonce', 'security' );
 
 			$pluginId = $_REQUEST['pluginId'];
 			$noteIndex = $_REQUEST['noteIndex'];

@@ -158,9 +158,11 @@ class Better_Plugin_Notes {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		// Custom column on plugins page in admin
 		$this->loader->add_filter( 'manage_plugins_columns', $plugin_admin, 'add_plugin_notes_column' );
 		$this->loader->add_action( 'manage_plugins_custom_column', $plugin_admin, 'display_plugin_note',10, 3 );
 
+		// Separate hooks for multisite admin plugins page
 		$this->loader->add_filter( 'manage_plugins-network_columns', $plugin_admin, 'add_plugin_notes_column' );
 		$this->loader->add_action( 'manage_plugins-network_custom_column', $plugin_admin, 'display_plugin_note',10, 3 );
 
