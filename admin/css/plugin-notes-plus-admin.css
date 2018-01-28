@@ -3,31 +3,31 @@
  * included in this file.
  */
 
-#bpn_plugin_notes_col {
+#pnp_plugin_notes_col {
     width: 200px;
     text-align: left;
 }
-.bpn-note-form-wrapper {
+.pnp-note-form-wrapper {
     display: none;
     padding-bottom: 12px;
 }
-.bpn-note-form {
+.pnp-note-form {
     display: block;
     width: 200px;
     height: 100px;
     margin-top: 5px;
 }
-.bpn-show-note-wrapper {
+.pnp-show-note-wrapper {
     padding-bottom: 10px;
 }
-.bpn-add-note {
+.pnp-add-note {
     font-size: 11px;
 }
 .view-icon span {
     vertical-align: middle;
 }
 
-.bpn-plugin-note span.dashicons {
+.pnp-plugin-note span.dashicons {
     padding-right: 5px;
 }
 .dashicons-info {
@@ -37,7 +37,7 @@
     color: red;
 }
 
-.bpn-plugin-note a[target="_blank"]:after {
+.pnp-plugin-note a[target="_blank"]:after {
     content: "\f504";
     font-family: dashicons;
     padding-left: 3px;

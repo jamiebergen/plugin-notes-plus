@@ -9,8 +9,8 @@
  * @link       https://jamiebergen.com/
  * @since      1.0.0
  *
- * @package    Better_Plugin_Notes
- * @subpackage Better_Plugin_Notes/includes
+ * @package    Plugin_Notes_Plus
+ * @subpackage Plugin_Notes_Plus/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Better_Plugin_Notes
- * @subpackage Better_Plugin_Notes/includes
+ * @package    Plugin_Notes_Plus
+ * @subpackage Plugin_Notes_Plus/includes
  * @author     Jamie Bergen <jamie.bergen@gmail.com>
  */
-class Better_Plugin_Notes {
+class Plugin_Notes_Plus {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +35,7 @@ class Better_Plugin_Notes {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Better_Plugin_Notes_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Plugin_Notes_Plus_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -72,12 +72,11 @@ class Better_Plugin_Notes {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'better-plugin-notes';
+		$this->plugin_name = 'plugin-notes-plus';
 
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
-		$this->define_public_hooks();
 
 	}
 
@@ -86,10 +85,9 @@ class Better_Plugin_Notes {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Better_Plugin_Notes_Loader. Orchestrates the hooks of the plugin.
-	 * - Better_Plugin_Notes_i18n. Defines internationalization functionality.
-	 * - Better_Plugin_Notes_Admin. Defines all hooks for the admin area.
-	 * - Better_Plugin_Notes_Public. Defines all hooks for the public side of the site.
+	 * - Plugin_Notes_Plus_Loader. Orchestrates the hooks of the plugin.
+	 * - Plugin_Notes_Plus_i18n. Defines internationalization functionality.
+	 * - Plugin_Notes_Plus_Admin. Defines all hooks for the admin area.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -103,34 +101,28 @@ class Better_Plugin_Notes {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-better-plugin-notes-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-plugin-notes-plus-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-better-plugin-notes-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-plugin-notes-plus-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-better-plugin-notes-admin.php';
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-better-plugin-notes-the-note.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-plugin-notes-plus-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-plugin-notes-plus-the-note.php';
 
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-better-plugin-notes-public.php';
-
-		$this->loader = new Better_Plugin_Notes_Loader();
+		$this->loader = new Plugin_Notes_Plus_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Better_Plugin_Notes_i18n class in order to set the domain and to register the hook
+	 * Uses the Plugin_Notes_Plus_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -138,7 +130,7 @@ class Better_Plugin_Notes {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Better_Plugin_Notes_i18n();
+		$plugin_i18n = new Plugin_Notes_Plus_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -153,7 +145,7 @@ class Better_Plugin_Notes {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Better_Plugin_Notes_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Plugin_Notes_Plus_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -166,25 +158,10 @@ class Better_Plugin_Notes {
 		$this->loader->add_filter( 'manage_plugins-network_columns', $plugin_admin, 'add_plugin_notes_column' );
 		$this->loader->add_action( 'manage_plugins-network_custom_column', $plugin_admin, 'display_plugin_note',10, 3 );
 
-		$this->loader->add_action( 'wp_ajax_bpn_add_response', $plugin_admin, 'bpn_add_response');
-		$this->loader->add_action( 'wp_ajax_bpn_delete_response', $plugin_admin, 'bpn_delete_response');
+		$this->loader->add_action( 'wp_ajax_pnp_add_response', $plugin_admin, 'pnp_add_response');
+		$this->loader->add_action( 'wp_ajax_pnp_delete_response', $plugin_admin, 'pnp_delete_response');
 	}
 
-	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_public_hooks() {
-
-		$plugin_public = new Better_Plugin_Notes_Public( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
-	}
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
@@ -210,7 +187,7 @@ class Better_Plugin_Notes {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Better_Plugin_Notes_Loader    Orchestrates the hooks of the plugin.
+	 * @return    Plugin_Notes_Plus_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;

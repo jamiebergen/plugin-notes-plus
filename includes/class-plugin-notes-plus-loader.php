@@ -6,8 +6,8 @@
  * @link       https://jamiebergen.com/
  * @since      1.0.0
  *
- * @package    Better_Plugin_Notes
- * @subpackage Better_Plugin_Notes/includes
+ * @package    Plugin_Notes_Plus
+ * @subpackage Plugin_Notes_Plus/includes
  */
 
 /**
@@ -17,11 +17,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Better_Plugin_Notes
- * @subpackage Better_Plugin_Notes/includes
+ * @package    Plugin_Notes_Plus
+ * @subpackage Plugin_Notes_Plus/includes
  * @author     Jamie Bergen <jamie.bergen@gmail.com>
  */
-class Better_Plugin_Notes_Loader {
+class Plugin_Notes_Plus_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

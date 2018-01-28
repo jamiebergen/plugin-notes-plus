@@ -6,8 +6,8 @@
  * @link       https://jamiebergen.com/
  * @since      1.0.0
  *
- * @package    Better_Plugin_Notes
- * @subpackage Better_Plugin_Notes/admin
+ * @package    Plugin_Notes_Plus
+ * @subpackage Plugin_Notes_Plus/admin
  */
 
 /**
@@ -16,11 +16,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Better_Plugin_Notes
- * @subpackage Better_Plugin_Notes/admin
+ * @package    Plugin_Notes_Plus
+ * @subpackage Plugin_Notes_Plus/admin
  * @author     Jamie Bergen <jamie.bergen@gmail.com>
  */
-class Better_Plugin_Notes_Admin {
+class Plugin_Notes_Plus_Admin {
 
 	/**
 	 * The ID of this plugin.
@@ -62,18 +62,17 @@ class Better_Plugin_Notes_Admin {
 	public function enqueue_styles() {
 
 		/**
-		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Better_Plugin_Notes_Loader as all of the hooks are defined
+		 * defined in Plugin_Notes_Plus_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Better_Plugin_Notes_Loader will then create the relationship
+		 * The Plugin_Notes_Plus_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/better-plugin-notes-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-notes-plus-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -85,45 +84,44 @@ class Better_Plugin_Notes_Admin {
 	public function enqueue_scripts() {
 
 		/**
-		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Better_Plugin_Notes_Loader as all of the hooks are defined
+		 * defined in Plugin_Notes_Plus_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Better_Plugin_Notes_Loader will then create the relationship
+		 * The Plugin_Notes_Plus_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
 		$params = array (
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'ajax_nonce' => wp_create_nonce( 'bpn_add_plugin_note_form_nonce' ), // this is a unique token to prevent form hijacking
+			'ajax_nonce' => wp_create_nonce( 'pnp_add_plugin_note_form_nonce' ), // this is a unique token to prevent form hijacking
 			'edit_text' => esc_html__( 'edit', $this->plugin_name ),
 			'delete_text' => esc_html__( 'delete', $this->plugin_name ),
 			'confirm_delete' => esc_html__( 'Are you sure you want to delete this note?', $this->plugin_name ),
 			'needs_content' => esc_html__( 'The note must contain content.', $this->plugin_name ),
 		);
-		wp_enqueue_script( 'bpn_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/better-plugin-notes-admin.js', array( 'jquery' ), $this->version, false );
-		wp_localize_script( 'bpn_ajax_handle', 'params', $params );
+		wp_enqueue_script( 'pnp_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-admin.js', array( 'jquery' ), $this->version, false );
+		wp_localize_script( 'pnp_ajax_handle', 'params', $params );
 
 	}
 	
 	public function add_plugin_notes_column( $columns ) {
-		$columns['bpn_plugin_notes_col'] =  esc_html__('Plugin Notes', $this->plugin_name);
+		$columns['pnp_plugin_notes_col'] =  esc_html__('Plugin Notes', $this->plugin_name);
 		return $columns;
 	}
 
 	public function get_plugin_unique_id( $plugin_file ) {
-		return '_aaa_plugin_note_' . sanitize_title( $plugin_file ); // !!! remove _aaa when done testing
+		return 'plugin_notes_plus_' . sanitize_title( $plugin_file );
 	}
 
 	public function display_plugin_note( $column_name, $plugin_file, $plugin_data ) {
 
 		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_file );
-		$plugin_note_obj = new Better_Plugin_Notes_The_Note( $plugin_unique_id  );
+		$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $plugin_unique_id  );
 
-		if ( 'bpn_plugin_notes_col' == $column_name ) {
+		if ( 'pnp_plugin_notes_col' == $column_name ) {
 
 			$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
 			ksort($the_plugin_notes);
@@ -132,13 +130,13 @@ class Better_Plugin_Notes_Admin {
 		}
 	}
 
-	public function bpn_add_response() {
+	public function pnp_add_response() {
 
 		// The $_REQUEST contains all the data sent via ajax
 		if ( isset($_REQUEST) ) {
 
 			// Check nonce and die if any funny business is detected
-			check_ajax_referer( 'bpn_add_plugin_note_form_nonce', 'security' );
+			check_ajax_referer( 'pnp_add_plugin_note_form_nonce', 'security' );
 
 			$note = $_REQUEST['note'];
 			$icon = $_REQUEST['icon'];
@@ -149,7 +147,7 @@ class Better_Plugin_Notes_Admin {
 			$user = wp_get_current_user()->display_name;
 
 			// Create object and create_plugin_note
-			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $pluginId );
+			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $pluginId );
 
 			if ($index !== '') {
 				$new_note_index = $plugin_note_obj->edit_plugin_note( $note, $icon, $index, $user );
@@ -169,33 +167,30 @@ class Better_Plugin_Notes_Admin {
 			wp_send_json($return);
 
 		}
-
 		// Always die in functions echoing ajax content
 		die();
 
 	}
 
-	public function bpn_delete_response() {
+	public function pnp_delete_response() {
 
 		// The $_REQUEST contains all the data sent via ajax
 		if ( isset($_REQUEST) ) {
 
 			// Check nonce and die if any funny business is detected
-			check_ajax_referer( 'bpn_add_plugin_note_form_nonce', 'security' );
+			check_ajax_referer( 'pnp_add_plugin_note_form_nonce', 'security' );
 
 			$pluginId = $_REQUEST['pluginId'];
 			$noteIndex = $_REQUEST['noteIndex'];
 
-			$plugin_note_obj = new Better_Plugin_Notes_The_Note( $pluginId );
+			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $pluginId );
 
 			if ( $plugin_note_obj->has_plugin_note() ) {
 				$plugin_note_obj->delete_plugin_note( $noteIndex );
 			}
 		}
-
 		// Always die in functions echoing ajax content
 		die();
-
 	}
 
 }

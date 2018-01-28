@@ -22,7 +22,7 @@
  * @link       https://jamiebergen.com/
  * @since      1.0.0
  *
- * @package    Better_Plugin_Notes
+ * @package    Plugin_Notes_Plus
  */
 
 // If uninstall not called from WordPress, then exit.

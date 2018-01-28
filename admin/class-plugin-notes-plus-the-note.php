@@ -4,7 +4,7 @@
 
 */
 
-class Better_Plugin_Notes_The_Note {
+class Plugin_Notes_Plus_The_Note {
 
 	/**
 	 * The unique ID of the plugin associated with the note.
@@ -47,7 +47,7 @@ class Better_Plugin_Notes_The_Note {
 	public function __construct( $plugin_unique_id ) {
 
 		$this->plugin_unique_id = $plugin_unique_id;
-		$this->allowed_tags = apply_filters('bpn_allowed_tags', $this->allowed_tags);
+		$this->allowed_tags = apply_filters('pnp_allowed_tags', $this->allowed_tags);
 	}
 
 	/**

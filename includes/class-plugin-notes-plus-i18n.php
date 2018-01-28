@@ -9,8 +9,8 @@
  * @link       https://jamiebergen.com/
  * @since      1.0.0
  *
- * @package    Better_Plugin_Notes
- * @subpackage Better_Plugin_Notes/includes
+ * @package    Plugin_Notes_Plus
+ * @subpackage Plugin_Notes_Plus/includes
  */
 
 /**
@@ -20,11 +20,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Better_Plugin_Notes
- * @subpackage Better_Plugin_Notes/includes
+ * @package    Plugin_Notes_Plus
+ * @subpackage Plugin_Notes_Plus/includes
  * @author     Jamie Bergen <jamie.bergen@gmail.com>
  */
-class Better_Plugin_Notes_i18n {
+class Plugin_Notes_Plus_i18n {
 
 
 	/**
@@ -35,7 +35,7 @@ class Better_Plugin_Notes_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'better-plugin-notes',
+			'plugin-notes-plus',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);
