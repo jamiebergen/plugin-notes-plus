@@ -125,6 +125,7 @@ class Plugin_Notes_Plus_Admin {
 
 			$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
 			ksort($the_plugin_notes);
+			$icon_options_array = $plugin_note_obj::$icon_options;
 			include( 'partials/plugin-note-markup.php' );
 
 		}
