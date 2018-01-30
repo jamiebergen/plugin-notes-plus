@@ -20,6 +20,7 @@ Features
 * Select an icon to go with each note to quickly convey what type of note it is (e.g., info, warning, link, etc.)
 * Format notes using basic HTML tags if desired.
 * Any links included in the note will be automatically converted to `target=\"_blank\"`
+* Notes are added and updated via Ajax, avoiding slow page reloads.
 
 == Installation ==
 1. You can either install the plugin via the Plugins directory from within your WordPress install, or you can upload the files manually to your server by extracting the .zip file and placing its contents in the /wp-content/plugins/ directory.
@@ -29,23 +30,45 @@ Features
 == Frequently Asked Questions ==
 = Can I modify which icons are available to display next to plugin notes? =
 
-Yes, you can use the filter pnp_icon_options to modify the set of icons available. The icons must be selected from here: https://developer.wordpress.org/resource/dashicons/
+Yes, you can use the filter plugin-notes-plus_icon_options to modify the set of icons available. The icons must be selected from here: https://developer.wordpress.org/resource/dashicons/
 
-Here is an example of a snippet that adds an additional icon to the list of options. It can be added to your the child theme's functions.php:
+Here is an example of a snippet that removes one icon and adds an additional icon to the list of options. It can be added to your the child theme's functions.php:
 
-`function change_icon_options( $input_array ) {
-    $input_array['dashicons-smartphone'] = 'Smartphone';
-    return $input_array;
+`function change_icon_options( $icon_options ) {
+
+    // Remove key option
+    unset( $icon_options['Key'] );
+
+    // Add smartphone option
+    $icon_options['Smartphone'] = 'dashicons-smartphone';
+
+	return $icon_options;
 }
-add_filter( 'pnp_icon_options', 'change_icon_options' );`
+add_filter( 'plugin-notes-plus_icon_options', 'change_icon_options' );`
 
-= Which HTML tags are permitted? =
+
+= Which HTML tags are permitted, and can that list be modified? =
 
 You can use the following HTML tags: `a`, `br`, `p`, `b`, `strong`, `i`, `em`, `u`, `hr`.
 
+To modify the list of available tags, use the filter plugin-notes-plus_allowed_html. Be careful, however, to avoid allowing tags that could leave the site vulnerable to a XSS attack.
+
+`function change_allowed_html_tags( $allowed_tags ) {
+
+    // Remove br from allowed tags
+    unset( $allowed_tags['br'] );
+
+    // Add img to allowed tags
+    $allowed_tags['img'] = array();
+
+    return $allowed_tags;
+}
+add_filter( 'plugin-notes-plus_allowed_html', 'change_allowed_html_tags' );`
+
+
 = Where is the data stored? =
 
-Plugin notes are stored in the options table. Each plugin has a separate entry to stores all of that plugin\'s notes and note meta.
+Plugin notes are stored in the options table. Each plugin has a separate entry that stores all of that plugin\'s notes and note meta.
 
 = How does it work on multisite installs? =
 

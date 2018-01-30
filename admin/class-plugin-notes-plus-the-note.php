@@ -39,22 +39,6 @@ class Plugin_Notes_Plus_The_Note {
 	);
 
 	/**
-	 * A list of dashicon options.
-	 *
-	 * @since    1.0.0
-	 * @access   public
-	 * @var      array    $icon_options
-	 */
-	public static $icon_options = array(
-		'dashicons-clipboard' => 'Note',
-		'dashicons-info' => 'Info',
-		'dashicons-admin-links' => 'Link',
-		'dashicons-warning' => 'Warning',
-		'dashicons-admin-network' => 'Key',
-		'dashicons-yes' => 'Checkmark',
-	);
-
-	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -63,8 +47,7 @@ class Plugin_Notes_Plus_The_Note {
 	public function __construct( $plugin_unique_id ) {
 
 		$this->plugin_unique_id = $plugin_unique_id;
-		$this->allowed_tags = apply_filters( 'pnp_allowed_tags', $this->allowed_tags );
-		self::$icon_options = apply_filters( 'pnp_icon_options', self::$icon_options );
+		$this->allowed_tags = apply_filters( 'plugin-notes-plus_allowed_html', $this->allowed_tags );
 	}
 
 	/**

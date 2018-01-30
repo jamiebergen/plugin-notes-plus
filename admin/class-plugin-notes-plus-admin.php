@@ -41,6 +41,22 @@ class Plugin_Notes_Plus_Admin {
 	private $version;
 
 	/**
+	 * A list of dashicon options.
+	 *
+	 * @since    1.0.0
+	 * @access   public
+	 * @var      array    $icon_options
+	 */
+	public static $icon_options = array(
+		'Note' => 'dashicons-clipboard',
+		'Info' => 'dashicons-info',
+		'Link' => 'dashicons-admin-links',
+		'Warning' => 'dashicons-warning',
+		'Key' => 'dashicons-admin-network',
+		'Checkmark' => 'dashicons-yes',
+	);
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -51,7 +67,6 @@ class Plugin_Notes_Plus_Admin {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
 
 	/**
@@ -125,7 +140,7 @@ class Plugin_Notes_Plus_Admin {
 
 			$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
 			ksort($the_plugin_notes);
-			$icon_options_array = $plugin_note_obj::$icon_options;
+			$icon_options_array = apply_filters( 'plugin-notes-plus_icon_options', self::$icon_options );
 			include( 'partials/plugin-note-markup.php' );
 
 		}
