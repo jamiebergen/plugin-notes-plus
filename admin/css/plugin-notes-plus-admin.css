@@ -25,10 +25,12 @@
 }
 .view-icon span {
     vertical-align: middle;
+    font-size: 20px;
 }
 
 .pnp-plugin-note span.dashicons {
     padding-right: 5px;
+    font-size: 20px;
 }
 .dashicons-info {
     color: deepskyblue;

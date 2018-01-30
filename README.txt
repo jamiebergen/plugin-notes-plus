@@ -34,7 +34,7 @@ Yes, you can use the filter pnp_icon_options to modify the set of icons availabl
 Here is an example of a snippet that adds an additional icon to the list of options. It can be added to your the child theme's functions.php:
 
 `function change_icon_options( $input_array ) {
-	$input_array['dashicons-smartphone'] = 'Smartphone';
+    $input_array['dashicons-smartphone'] = 'Smartphone';
     return $input_array;
 }
 add_filter( 'pnp_icon_options', 'change_icon_options' );`
