@@ -42,7 +42,7 @@ Here is an example of a snippet that removes one icon and adds an additional ico
     // Add smartphone option
     $icon_options['Smartphone'] = 'dashicons-smartphone';
 
-	return $icon_options;
+    return $icon_options;
 }
 add_filter( 'plugin-notes-plus_icon_options', 'change_icon_options' );`
 
@@ -66,7 +66,7 @@ add_filter( 'plugin-notes-plus_allowed_html', 'change_allowed_html_tags' );`
 
 = Where is the data stored? =
 
-Plugin notes are stored in the options table. Each plugin has a separate entry that stores all of that plugin\'s notes and note meta.
+Plugin notes are stored in the options table. Each plugin with note(s) is given a separate entry that stores all of that plugin\'s notes and note meta.
 
 = How does it work on multisite installs? =
 
