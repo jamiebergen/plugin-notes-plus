@@ -82,10 +82,13 @@ jQuery( document ).ready( function( $ ) {
 
         var newNoteForm = $(this).siblings('.pnp-note-form-wrapper');
 
+        // Get class for first icon in list
+        var firstIcon = newNoteForm.find('.select-dashicon-for-note option:first-child').val();
+
         // Clear previous form content, reset icon, show form
         newNoteForm.find('.pnp-note-form').val('');
-        newNoteForm.find('.select-dashicon-for-note').val('dashicons-clipboard');
-        newNoteForm.find('.view-icon').html('<span class="dashicons dashicons-clipboard"></span>');
+        newNoteForm.find('.select-dashicon-for-note').val(firstIcon);
+        newNoteForm.find('.view-icon').html('<span class="dashicons '+ firstIcon + '"></span>');
 
         newNoteForm.show();
 
