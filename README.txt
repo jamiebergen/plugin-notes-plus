@@ -12,14 +12,14 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Adds a column to the Plugins page where you can add, edit, or delete notes about a plugin.
 
 == Description ==
-Have you ever returned to a site that you built a while back and asked, \"Dude, why did I install this plugin?\" This plugin provides an extra column on the Plugins page that enables you to add, edit, or delete notes about the plugins you have installed on a particular site. These notes are intended to provide documentation regarding why a particular plugin was installed and how it\'s being used.
+Have you ever returned to a site that you built a while back and asked, "Dude, why did I install this plugin?" This plugin provides an extra column on the Plugins page that enables you to add, edit, or delete notes about the plugins you have installed on a particular site. These notes are intended to provide documentation regarding why a particular plugin was installed and how it's being used.
 
 Features
 * Add as many or as few notes as you need for each plugin.
 * Edit or delete notes as desired.
-* Select an icon to go with each note to quickly convey what type of note it is (e.g., info, warning, link, etc.)
+* Select an icon to go with each note to quickly convey what type of content it contains (e.g., info, warning, link, etc.)
 * Format notes using basic HTML tags if desired.
-* Any links included in the note will be automatically converted to `target=\"_blank\"`
+* Any links included in the note will be automatically converted to `target="_blank"`
 * Notes are added and updated via Ajax, avoiding slow page reloads.
 
 == Installation ==
@@ -66,7 +66,7 @@ add_filter( 'plugin-notes-plus_allowed_html', 'change_allowed_html_tags' );`
 
 = Where is the data stored? =
 
-Plugin notes are stored in the options table. Each plugin with note(s) is given a separate entry that stores all of that plugin\'s notes and note meta.
+Plugin notes are stored in the options table. Each plugin with note(s) is given a separate entry that stores all of that plugin's notes and note meta.
 
 = How does it work on multisite installs? =
 
