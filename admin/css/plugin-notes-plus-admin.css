@@ -43,5 +43,5 @@
     content: "\f504";
     font-family: dashicons;
     padding-left: 3px;
-    position: absolute;
+    vertical-align: top;
 }

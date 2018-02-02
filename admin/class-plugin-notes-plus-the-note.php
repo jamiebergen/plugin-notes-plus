@@ -204,72 +204,23 @@ class Plugin_Notes_Plus_The_Note {
 	protected function process_plugin_note( $note ) {
 
 		$sanitized_note = stripslashes( force_balance_tags( wp_kses( $note, $this->allowed_tags ) ) );
-
-		$note_with_links = $this->linkify( $sanitized_note );
+		$note_with_links = $this->convert_urls_to_links( $sanitized_note );
 
 		return $note_with_links;
 	}
 
-
 	/**
 	 * Turn all URLs in clickable links.
-	 * Source: https://gist.github.com/jasny/2000705
 	 *
-	 * @param string $value
-	 * @param array  $protocols  http/https, ftp, mail, twitter
-	 * @param array  $attributes
+	 * @param string $input
 	 * @return string
 	 *
 	 */
-	protected function linkify( $value, $protocols = array('http', 'mail'), array $attributes = array() ) {
-		// Link attributes
-		$attr = '';
-		foreach ( $attributes as $key => $val ) {
-			$attr = ' ' . $key . '="' . htmlentities( $val ) . '"';
-		}
+	protected function convert_urls_to_links( $input ) {
 
-		$links = array();
+		$url_without_tags_regex = "/<a.*?<\/a>(*SKIP)(*F)|https?:\/\/\S*[^\s`!()\[\]{};:'\".,<>?«»“”‘’]/";
+		$replacement_pattern = "<a href='$0'>$0</a>";
 
-		// Extract existing links and tags
-		$value = preg_replace_callback( '~(<a .*?>.*?</a>|<.*?>)~i', function ( $match ) use ( &$links ) {
-			return '<' . array_push( $links, $match[1] ) . '>';
-		}, $value );
-
-		// Extract text links for each protocol
-		foreach ( (array) $protocols as $protocol ) {
-			switch ( $protocol ) {
-				case 'http':
-				case 'https':
-					$value = preg_replace_callback( '~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i', function ( $match ) use ( $protocol, &$links, $attr ) {
-						if ( $match[1] ) {
-							$protocol = $match[1];
-						}
-						$link = $match[2] ?: $match[3];
-
-						return '<' . array_push( $links, "<a $attr href=\"$protocol://$link\">$link</a>" ) . '>';
-					}, $value );
-					break;
-				case 'mail':
-					$value = preg_replace_callback( '~([^\s<]+?@[^\s<]+?\.[^\s<]+)(?<![\.,:])~', function ( $match ) use ( &$links, $attr ) {
-						return '<' . array_push( $links, "<a $attr href=\"mailto:{$match[1]}\">{$match[1]}</a>" ) . '>';
-					}, $value );
-					break;
-				case 'twitter':
-					$value = preg_replace_callback( '~(?<!\w)[@#](\w++)~', function ( $match ) use ( &$links, $attr ) {
-						return '<' . array_push( $links, "<a $attr href=\"https://twitter.com/" . ( $match[0][0] == '@' ? '' : 'search/%23' ) . $match[1] . "\">{$match[0]}</a>" ) . '>';
-					}, $value );
-					break;
-				default:
-					$value = preg_replace_callback( '~' . preg_quote( $protocol, '~' ) . '://([^\s<]+?)(?<![\.,:])~i', function ( $match ) use ( $protocol, &$links, $attr ) {
-						return '<' . array_push( $links, "<a $attr href=\"$protocol://{$match[1]}\">{$match[1]}</a>" ) . '>';
-					}, $value );
-					break;
-			}
-		}
-
-		// Insert all links
-		return preg_replace_callback( '/<(\d+)>/', function ( $match ) use ( &$links ) {
-			return $links[ $match[1] - 1 ];
-		}, $value );
+		return preg_replace( $url_without_tags_regex, $replacement_pattern, $input );
 	}
 }
