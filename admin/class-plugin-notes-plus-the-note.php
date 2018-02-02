@@ -219,7 +219,7 @@ class Plugin_Notes_Plus_The_Note {
 	protected function convert_urls_to_links( $input ) {
 
 		$url_without_tags_regex = "/<a.*?<\/a>(*SKIP)(*F)|https?:\/\/\S*[^\s`!()\[\]{};:'\".,<>?«»“”‘’]/";
-		$replacement_pattern = "<a href='$0'>$0</a>";
+		$replacement_pattern = '<a href="$0">$0</a>';
 
 		return preg_replace( $url_without_tags_regex, $replacement_pattern, $input );
 	}

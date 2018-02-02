@@ -49,7 +49,7 @@ jQuery( document ).ready( function( $ ) {
 
         var editNoteForm = noteToEdit.next('.pnp-note-form-wrapper');
 
-        var noteContent = pluginNotes[pluginId + "-" + noteIndex].note;
+        var noteContent = pluginNotes[pluginId + "-" + noteIndex].note.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
         var noteIcon = pluginNotes[pluginId + "-" + noteIndex].icon;
 
         editNoteForm.find('.pnp-note-form').val(noteContent);

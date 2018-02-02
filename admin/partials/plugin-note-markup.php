@@ -29,7 +29,7 @@ if ( current_user_can('activate_plugins') ) {
                 <script>
                     registerPluginNote( "<?php echo $plugin_unique_id; ?>",
                                         "<?php echo $note_index; ?>",
-                                        "<?php echo str_replace("\n", '\n', $the_plugin_note['note']); ?>",
+                                        "<?php echo str_replace("\n", '\n', htmlentities($the_plugin_note['note'])); ?>",
                                         "<?php echo $the_plugin_note['icon']; ?>",
                     );
 
