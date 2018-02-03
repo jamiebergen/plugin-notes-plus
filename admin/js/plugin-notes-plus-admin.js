@@ -49,7 +49,8 @@ jQuery( document ).ready( function( $ ) {
 
         var editNoteForm = noteToEdit.next('.pnp-note-form-wrapper');
 
-        var noteContent = pluginNotes[pluginId + "-" + noteIndex].note.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+        //var noteContent = pluginNotes[pluginId + "-" + noteIndex].note.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+        var noteContent = pluginNotes[pluginId + "-" + noteIndex].note;
         var noteIcon = pluginNotes[pluginId + "-" + noteIndex].icon;
 
         editNoteForm.find('.pnp-note-form').val(noteContent);
@@ -103,6 +104,7 @@ jQuery( document ).ready( function( $ ) {
         var noteContent = $(this).siblings('.pnp-note-form').val();
         var noteIcon = $(this).siblings().find('.select-dashicon-for-note').val();
 
+        // Don't allow save with empty content
         if ($.trim(noteContent) === "") {
             alert(params.needs_content);
             return false;
@@ -121,6 +123,11 @@ jQuery( document ).ready( function( $ ) {
         // Get handle on form for after the request
         var noteForm = $(this).closest('.pnp-note-form-wrapper');
 
+        // Show spinner and disable textarea
+        var saveSpinner = $(this).next('.dashicons.spin');
+        saveSpinner.css('display', 'inline-block');
+        noteForm.find('textarea').prop('disabled', true);
+
         // This does the ajax request
         $.ajax({
             url: params.ajaxurl,
@@ -135,6 +142,7 @@ jQuery( document ).ready( function( $ ) {
             success:function( response ) {
 
                 noteForm.hide();
+                saveSpinner.hide();
 
                 // Case where user creates new note
                 var addNoteLink = noteForm.siblings('.pnp-add-note');
@@ -168,7 +176,7 @@ jQuery( document ).ready( function( $ ) {
                 // Add target blank to a tags
                 $('#' + pluginId + ' .pnp-plugin-note a').attr( 'target', '_blank' );
 
-                // Add new note to dictionary
+                // Add new note to object
                 registerPluginNote( pluginId, response.new_note_index, response.processed_note, response.note_icon );
 
             },

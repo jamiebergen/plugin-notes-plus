@@ -27,16 +27,19 @@
     vertical-align: middle;
     font-size: 20px;
 }
-
 .pnp-plugin-note span.dashicons {
     padding-right: 5px;
     font-size: 20px;
 }
+
 .dashicons-info {
     color: deepskyblue;
 }
 .dashicons-warning {
     color: red;
+}
+.dashicons-yes {
+    color: green;
 }
 
 .pnp-plugin-note a[target="_blank"]:after {
@@ -44,4 +47,18 @@
     font-family: dashicons;
     padding-left: 3px;
     vertical-align: top;
+}
+
+.dashicons.spin {
+    display: none;
+    animation: dashicons-spin 1s infinite;
+    animation-timing-function: linear;
+}
+@keyframes dashicons-spin {
+    0% {
+        transform: rotate( 0deg );
+    }
+    100% {
+        transform: rotate( 360deg );
+    }
 }

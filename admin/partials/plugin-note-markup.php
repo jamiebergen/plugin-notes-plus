@@ -29,7 +29,7 @@ if ( current_user_can('activate_plugins') ) {
                 <script>
                     registerPluginNote( "<?php echo $plugin_unique_id; ?>",
                                         "<?php echo $note_index; ?>",
-                                        "<?php echo str_replace("\n", '\n', htmlentities($the_plugin_note['note'])); ?>",
+                                        "<?php echo str_replace("\n", '\n', addslashes($the_plugin_note['note'])); ?>",
                                         "<?php echo $the_plugin_note['icon']; ?>",
                     );
 
@@ -52,7 +52,9 @@ if ( current_user_can('activate_plugins') ) {
                     </select>
                 </label>
                 <textarea class="pnp-note-form"></textarea>
-				<a href="#" class="pnp-save-note"><?php esc_html_e( 'Save note', $this->plugin_name ) ?></a> |
+				<a href="#" class="pnp-save-note"><?php esc_html_e( 'Save note', $this->plugin_name ) ?></a>
+                <span class="spin dashicons dashicons-update"></span>
+                |
                 <a href="#" class="pnp-cancel-note"><?php esc_html_e( 'Cancel', $this->plugin_name ) ?></a>
 				<div id="pnp_form_feedback"></div>
 			</div>
