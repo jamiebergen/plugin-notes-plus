@@ -124,9 +124,10 @@ jQuery( document ).ready( function( $ ) {
         var noteForm = $(this).closest('.pnp-note-form-wrapper');
 
         // Show spinner and disable textarea
-        var saveSpinner = $(this).next('.dashicons.spin');
+        var saveSpinner = $(this).next('.dashicons.pnp-spin');
         saveSpinner.css('display', 'inline-block');
         noteForm.find('textarea').prop('disabled', true);
+        noteForm.find('.pnp-cancel-note, .pnp-divider').hide();
 
         // This does the ajax request
         $.ajax({
@@ -144,6 +145,7 @@ jQuery( document ).ready( function( $ ) {
                 noteForm.hide();
                 saveSpinner.hide();
                 noteForm.find('textarea').prop('disabled', false);
+                noteForm.find('.pnp-cancel-note, .pnp-divider').show();
 
                 // Case where user creates new note
                 var addNoteLink = noteForm.siblings('.pnp-add-note');

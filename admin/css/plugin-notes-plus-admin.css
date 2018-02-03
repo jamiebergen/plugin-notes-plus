@@ -49,7 +49,7 @@
     vertical-align: top;
 }
 
-.dashicons.spin {
+.dashicons.pnp-spin {
     display: none;
     animation: dashicons-spin 1s infinite;
     animation-timing-function: linear;

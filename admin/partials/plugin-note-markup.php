@@ -53,8 +53,8 @@ if ( current_user_can('activate_plugins') ) {
                 </label>
                 <textarea class="pnp-note-form"></textarea>
 				<a href="#" class="pnp-save-note"><?php esc_html_e( 'Save note', $this->plugin_name ) ?></a>
-                <span class="spin dashicons dashicons-update"></span>
-                |
+                <span class="pnp-spin dashicons dashicons-update"></span>
+                <span class="pnp-divider"> | </span>
                 <a href="#" class="pnp-cancel-note"><?php esc_html_e( 'Cancel', $this->plugin_name ) ?></a>
 				<div id="pnp_form_feedback"></div>
 			</div>
