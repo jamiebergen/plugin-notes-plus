@@ -37,10 +37,10 @@ Here is an example of a snippet that removes one icon and adds an additional ico
 `function change_icon_options( $icon_options ) {
 
     // Remove key option
-    unset( $icon_options['Key'] );
+    unset( $icon_options['dashicons-admin-network'] );
 
     // Add smartphone option
-    $icon_options['Smartphone'] = 'dashicons-smartphone';
+    $icon_options['dashicons-smartphone'] = 'Smartphone';
 
     return $icon_options;
 }
