@@ -46,8 +46,8 @@ if ( current_user_can('activate_plugins') ) {
 	                <?php esc_html_e( 'Note type:', $this->plugin_name ) ?>
                     <span class="view-icon"></span>
                     <select id="<?php echo $plugin_unique_id; ?>" class="select-dashicon-for-note">
-                        <?php foreach ( $icon_options_array as $icon_name => $icon_class ) {
-                            echo '<option value="'. $icon_class . '">' . esc_html__( $icon_name, $this->plugin_name ) . '</option>';
+                        <?php foreach ( $icon_options_array as $icon_class => $icon_name ) {
+                            echo '<option value="'. $icon_class . '">' . $icon_name . '</option>';
                         } ?>
                     </select>
                 </label>

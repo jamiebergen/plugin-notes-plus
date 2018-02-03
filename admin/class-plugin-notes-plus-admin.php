@@ -41,20 +41,14 @@ class Plugin_Notes_Plus_Admin {
 	private $version;
 
 	/**
-	 * A list of dashicon options.
+	 * A list of icon options. See definition of $icon_options after
+	 * the end of the class.
 	 *
 	 * @since    1.0.0
 	 * @access   public
 	 * @var      array    $icon_options
 	 */
-	public static $icon_options = array(
-		'Note' => 'dashicons-clipboard',
-		'Info' => 'dashicons-info',
-		'Link' => 'dashicons-admin-links',
-		'Warning' => 'dashicons-warning',
-		'Key' => 'dashicons-admin-network',
-		'Checkmark' => 'dashicons-yes',
-	);
+	public static $icon_options;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -123,7 +117,7 @@ class Plugin_Notes_Plus_Admin {
 	}
 	
 	public function add_plugin_notes_column( $columns ) {
-		$columns['pnp_plugin_notes_col'] =  esc_html__('Plugin Notes', $this->plugin_name);
+		$columns['pnp_plugin_notes_col'] =  esc_html__( 'Plugin Notes', $this->plugin_name );
 		return $columns;
 	}
 
@@ -210,3 +204,12 @@ class Plugin_Notes_Plus_Admin {
 	}
 
 }
+
+Plugin_Notes_Plus_Admin::$icon_options = array(
+	'dashicons-clipboard' => esc_html__( 'Note', $this->plugin_name ),
+	'dashicons-info' => esc_html__( 'Info', $this->plugin_name ),
+	'dashicons-admin-links' => esc_html__( 'Link', $this->plugin_name ),
+	'dashicons-warning' => esc_html__( 'Warning', $this->plugin_name ),
+	'dashicons-admin-network' => esc_html__( 'Key', $this->plugin_name ),
+	'dashicons-yes' => esc_html__( 'Checkmark', $this->plugin_name ),
+);
