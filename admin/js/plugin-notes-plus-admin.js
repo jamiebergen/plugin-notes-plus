@@ -143,6 +143,7 @@ jQuery( document ).ready( function( $ ) {
 
                 noteForm.hide();
                 saveSpinner.hide();
+                noteForm.find('textarea').prop('disabled', false);
 
                 // Case where user creates new note
                 var addNoteLink = noteForm.siblings('.pnp-add-note');

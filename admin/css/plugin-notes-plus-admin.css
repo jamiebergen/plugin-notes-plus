@@ -53,6 +53,8 @@
     display: none;
     animation: dashicons-spin 1s infinite;
     animation-timing-function: linear;
+    font-size: 20px;
+    color: #0073aa;
 }
 @keyframes dashicons-spin {
     0% {
