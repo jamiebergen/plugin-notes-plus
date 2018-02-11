@@ -207,7 +207,7 @@ jQuery( document ).ready( function( $ ) {
         markup += '<div class="pnp-plugin-note">';
         markup += '<span class="dashicons ' + icon + '"></span>';
         markup += note;
-        markup += '<p class="pnp-note-meta">' + user + ' | <span class="pnp-noteigt -time"></span></p>';
+        markup += '<p class="pnp-note-meta">' + user + ' | <span class="pnp-note-time"></span></p>';
         markup += '</div>';
         markup += '<a href="#" class="pnp-edit-note">' + params.edit_text + '</a> | ';
         markup += '<a href="#" class="pnp-delete-note">' + params.delete_text + '</a>';
