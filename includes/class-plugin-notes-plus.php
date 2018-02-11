@@ -55,8 +55,8 @@ class Plugin_Notes_Plus {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'PLUGIN_VERSION' ) ) {
-			$this->version = PLUGIN_VERSION;
+		if ( defined( 'PLUGIN_NOTES_PLUS_VERSION' ) ) {
+			$this->version = PLUGIN_NOTES_PLUS_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
