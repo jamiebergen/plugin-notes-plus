@@ -10,7 +10,7 @@ function registerPluginNote( pluginId, noteIndex, noteContent, noteIcon, noteTim
     var year = d.getFullYear();
     var formattedDate = year + '-' + month + '-' + date;
 
-    jQuery('#' + pluginId + ' .pnp-note-time').html(formattedDate);
+    jQuery('#' + uniqueId + ' .pnp-note-time').html(formattedDate);
 
     pluginNotes[uniqueId] = {
         note: noteContent,
