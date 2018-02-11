@@ -76,6 +76,8 @@ class Plugin_Notes_Plus_The_Note {
 		$note_output_array = array();
 		$note_output_array['note'] = $this->process_plugin_note( $note_array['note'] );
 		$note_output_array['icon'] = $note_array['icon'];
+		$note_output_array['user'] = $note_array['user'];
+		$note_output_array['time'] = $note_array['time'];
 
 		return $note_output_array;
 	}
@@ -95,6 +97,8 @@ class Plugin_Notes_Plus_The_Note {
 			foreach( $notes_array as $index => $note_array ) {
 				$notes_output_array[$index]['note'] = $this->process_plugin_note( $note_array['note'] );
 				$notes_output_array[$index]['icon'] = $note_array['icon'];
+				$notes_output_array[$index]['user'] = $note_array['user'];
+				$notes_output_array[$index]['time'] = $note_array['time'];
 			}
 		}
 		return $notes_output_array;
@@ -148,7 +152,9 @@ class Plugin_Notes_Plus_The_Note {
 	 */
 	public function edit_plugin_note( $note_text, $icon_class, $note_index, $username ) {
 
-		$note_time = substr( $note_index, 0, -3 );
+		//$note_time = substr( $note_index, 0, -3 );
+
+		$note_time = time(); // update time for edited note
 
 		$edited_note_array = $this->set_up_plugin_note_array( $note_text, $icon_class, $username, $note_time );
 

@@ -172,7 +172,9 @@ class Plugin_Notes_Plus_Admin {
 			$return = array(
 				'new_note_index'  => $new_note_index,
 				'note_icon'       => $processed_note['icon'],
-				'processed_note'  => $processed_note['note']
+				'processed_note'  => $processed_note['note'],
+				'note_user'       => $processed_note['user'],
+				'note_time'       => $processed_note['time']
 			);
 			wp_send_json($return);
 
