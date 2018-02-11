@@ -2,24 +2,19 @@
 
 /**
  * The admin-specific functionality of the plugin.
+ * Defines the plugin name, version, and icon options.
+ * Enqueues admin-specific styles and scripts.
+ * Defines functions for adding a custom column and rendering plugin notes.
+ * Defines ajax handlers for adding and deleting notes.
  *
  * @link       https://jamiebergen.com/
  * @since      1.0.0
  *
  * @package    Plugin_Notes_Plus
  * @subpackage Plugin_Notes_Plus/admin
- */
-
-/**
- * The admin-specific functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
- *
- * @package    Plugin_Notes_Plus
- * @subpackage Plugin_Notes_Plus/admin
  * @author     Jamie Bergen <jamie.bergen@gmail.com>
  */
+
 class Plugin_Notes_Plus_Admin {
 
 	/**
@@ -115,16 +110,31 @@ class Plugin_Notes_Plus_Admin {
 		wp_localize_script( 'pnp_ajax_handle', 'params', $params );
 
 	}
-	
+
+	/**
+	 * Add a custom column on the plugins page for notes.
+	 *
+	 * @since    1.0.0
+	 */
 	public function add_plugin_notes_column( $columns ) {
 		$columns['pnp_plugin_notes_col'] =  esc_html__( 'Plugin Notes', $this->plugin_name );
 		return $columns;
 	}
 
+	/**
+	 * Generate a unique id for a plugin based on the plugin's filepath.
+	 *
+	 * @since    1.0.0
+	 */
 	public function get_plugin_unique_id( $plugin_file ) {
 		return 'plugin_notes_plus_' . sanitize_title( $plugin_file );
 	}
 
+	/**
+	 * Display the plugin note(s) for a given plugin.
+	 *
+	 * @since    1.0.0
+	 */
 	public function display_plugin_note( $column_name, $plugin_file, $plugin_data ) {
 
 		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_file );
@@ -140,6 +150,11 @@ class Plugin_Notes_Plus_Admin {
 		}
 	}
 
+	/**
+	 * Ajax handler for adding a plugin note.
+	 *
+	 * @since    1.0.0
+	 */
 	public function pnp_add_response() {
 
 		// The $_REQUEST contains all the data sent via ajax
@@ -184,6 +199,11 @@ class Plugin_Notes_Plus_Admin {
 
 	}
 
+	/**
+	 * Ajax handler for deleting a plugin note.
+	 *
+	 * @since    1.0.0
+	 */
 	public function pnp_delete_response() {
 
 		// The $_REQUEST contains all the data sent via ajax

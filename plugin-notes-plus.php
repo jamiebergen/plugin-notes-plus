@@ -38,16 +38,6 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'PLUGIN_VERSION', '1.0.0' );
 
 /**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-plugin-notes-plus-deactivator.php
- */
-function deactivate_plugin_notes_plus() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-plugin-notes-plus-deactivator.php';
-	Plugin_Notes_Plus_Deactivator::deactivate();
-}
-register_deactivation_hook( __FILE__, 'deactivate_plugin_notes_plus' );
-
-/**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */

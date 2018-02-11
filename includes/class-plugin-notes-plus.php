@@ -3,30 +3,18 @@
 /**
  * The file that defines the core plugin class
  *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
+ * This is used to define internationalization and admin-specific hooks.
+ * Also maintains the unique identifier of this plugin as well as the current
+ * version of the plugin.
  *
  * @link       https://jamiebergen.com/
  * @since      1.0.0
  *
  * @package    Plugin_Notes_Plus
  * @subpackage Plugin_Notes_Plus/includes
- */
-
-/**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
- *
- * @since      1.0.0
- * @package    Plugin_Notes_Plus
- * @subpackage Plugin_Notes_Plus/includes
  * @author     Jamie Bergen <jamie.bergen@gmail.com>
  */
+
 class Plugin_Notes_Plus {
 
 	/**

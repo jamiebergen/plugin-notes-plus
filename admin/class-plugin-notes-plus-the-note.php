@@ -1,7 +1,16 @@
 <?php
 
-/*
-
+/**
+ * A class that handles the notes for each plugin.
+ * Defines functions to add, edit, and delete plugin notes.
+ * Also defines functions to retrieve note(s) for a specific plugin.
+ *
+ * @link       https://jamiebergen.com/
+ * @since      1.0.0
+ *
+ * @package    Plugin_Notes_Plus
+ * @subpackage Plugin_Notes_Plus/admin
+ * @author     Jamie Bergen <jamie.bergen@gmail.com>
 */
 
 class Plugin_Notes_Plus_The_Note {

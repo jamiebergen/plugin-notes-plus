@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Define the internationalization functionality
+ * Define the internationalization functionality.
  *
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
@@ -11,21 +10,9 @@
  *
  * @package    Plugin_Notes_Plus
  * @subpackage Plugin_Notes_Plus/includes
- */
-
-/**
- * Define the internationalization functionality.
- *
- * Loads and defines the internationalization files for this plugin
- * so that it is ready for translation.
- *
- * @since      1.0.0
- * @package    Plugin_Notes_Plus
- * @subpackage Plugin_Notes_Plus/includes
  * @author     Jamie Bergen <jamie.bergen@gmail.com>
  */
 class Plugin_Notes_Plus_i18n {
-
 
 	/**
 	 * Load the plugin text domain for translation.
@@ -41,7 +28,5 @@ class Plugin_Notes_Plus_i18n {
 		);
 
 	}
-
-
 
 }
