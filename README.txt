@@ -34,7 +34,7 @@ Yes, you can use the filter plugin-notes-plus_icon_options to modify the set of 
 
 Here is an example of a snippet that removes one icon and adds an additional icon to the list of options. It can be added to your the child theme's functions.php:
 
-`function change_icon_options( $icon_options ) {
+`function pnp_change_icon_options( $icon_options ) {
 
     // Remove key option
     unset( $icon_options['dashicons-admin-network'] );
@@ -44,7 +44,7 @@ Here is an example of a snippet that removes one icon and adds an additional ico
 
     return $icon_options;
 }
-add_filter( 'plugin-notes-plus_icon_options', 'change_icon_options' );`
+add_filter( 'plugin-notes-plus_icon_options', 'pnp_change_icon_options' );`
 
 = Which HTML tags are permitted, and can that list be modified? =
 
@@ -52,7 +52,7 @@ You can use the following HTML tags: `a`, `br`, `p`, `b`, `strong`, `i`, `em`, `
 
 To modify the list of available tags, use the filter plugin-notes-plus_allowed_html. Be careful, however, to avoid allowing tags that could leave the site vulnerable to an XSS attack.
 
-`function change_allowed_html_tags( $allowed_tags ) {
+`function pnp_change_allowed_html_tags( $allowed_tags ) {
 
     // Remove br from allowed tags
     unset( $allowed_tags['br'] );
@@ -62,11 +62,11 @@ To modify the list of available tags, use the filter plugin-notes-plus_allowed_h
 
     return $allowed_tags;
 }
-add_filter( 'plugin-notes-plus_allowed_html', 'change_allowed_html_tags' );`
+add_filter( 'plugin-notes-plus_allowed_html', 'pnp_change_allowed_html_tags' );`
 
 = Where is the data stored? =
 
-Plugin notes are stored in the options table. Each plugin with note(s) is given a separate entry that stores all of that plugin's notes and note meta.
+Plugin notes are stored in the options table. Each plugin with note(s) is given a separate entry that stores all of that plugin's notes and note metadata.
 
 = How does it work on multisite installs? =
 

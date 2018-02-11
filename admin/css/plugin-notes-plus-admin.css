@@ -37,13 +37,13 @@
 }
 
 /* Icon colors */
-.dashicons-info {
+.pnp-wrapper .dashicons-info {
     color: deepskyblue;
 }
-.dashicons-warning {
+.pnp-wrapper .dashicons-warning {
     color: red;
 }
-.dashicons-yes {
+.pnp-wrapper .dashicons-yes {
     color: green;
 }
 
