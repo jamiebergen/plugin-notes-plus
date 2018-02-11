@@ -36,6 +36,7 @@
     margin-top: 5px !important;
 }
 
+/* Icon colors */
 .dashicons-info {
     color: deepskyblue;
 }
@@ -46,6 +47,7 @@
     color: green;
 }
 
+/* Icon to indicate that link is opened in new tab */
 .pnp-plugin-note a[target="_blank"]:after {
     content: "\f504";
     font-family: dashicons;
@@ -53,6 +55,7 @@
     vertical-align: top;
 }
 
+/* Spinner displayed while saving */
 .dashicons.pnp-spin {
     display: none;
     animation: dashicons-spin 1s infinite;

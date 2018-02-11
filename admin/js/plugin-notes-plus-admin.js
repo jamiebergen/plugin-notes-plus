@@ -1,7 +1,17 @@
 // Store all notes in a global variable for easy access
 var pluginNotes = {};
-function registerPluginNote( pluginId, noteIndex, noteContent, noteIcon ) {
+function registerPluginNote( pluginId, noteIndex, noteContent, noteIcon, noteTime ) {
     uniqueId = pluginId + '-' + noteIndex;
+
+    // Convert time to readable format and insert into span
+    var d = new Date(noteTime * 1000);
+    var month = ("0" + (d.getMonth() + 1)).slice(-2);
+    var date = ("0" + d.getDate()).slice(-2);
+    var year = d.getFullYear();
+    var formattedDate = year + '-' + month + '-' + date;
+
+    jQuery('#' + pluginId + ' .pnp-note-time').html(formattedDate);
+
     pluginNotes[uniqueId] = {
         note: noteContent,
         icon: noteIcon
@@ -49,7 +59,6 @@ jQuery( document ).ready( function( $ ) {
 
         var editNoteForm = noteToEdit.next('.pnp-note-form-wrapper');
 
-        //var noteContent = pluginNotes[pluginId + "-" + noteIndex].note.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
         var noteContent = pluginNotes[pluginId + "-" + noteIndex].note;
         var noteIcon = pluginNotes[pluginId + "-" + noteIndex].icon;
 
@@ -69,26 +78,10 @@ jQuery( document ).ready( function( $ ) {
         $(this).change();
     });
 
-    function processNotes() {
-        // Add target="_blank" to all links
-        $('.pnp-plugin-note a').each(function(){
-            $(this).attr( 'target', '_blank' );
-        });
-
-        // Convert time to readable format
-        $('.pnp-convert-time').each(function() {
-            var phpTime = $(this).html();
-            var d = new Date(phpTime * 1000);
-
-            var month = ("0" + (d.getMonth() + 1)).slice(-2);
-            var date = ("0" + d.getDate()).slice(-2);
-            var year = d.getFullYear();
-
-            $(this).html(month + '/' + date + '/' + year);
-
-        });
-    }
-    processNotes();
+    // Add target="_blank" to all links
+    $('.pnp-plugin-note a').each(function(){
+        $(this).attr( 'target', '_blank' );
+    });
 
 
     $('.pnp-add-note').click( function( event ) {
@@ -167,13 +160,13 @@ jQuery( document ).ready( function( $ ) {
                 var addNoteLink = noteForm.siblings('.pnp-add-note');
                 if (addNoteLink.length){
                     // Add new note to end of notes list
-                    $(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, response.note_time, pluginId, response.new_note_index )).insertBefore('#' + pluginId + ' .pnp-add-note-wrapper');
+                    $(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginId, response.new_note_index )).insertBefore('#' + pluginId + ' .pnp-add-note-wrapper');
                     addNoteLink.show();
                 }
                 // Case where user edits existing note
                 var existingNote = noteForm.prev('.pnp-show-note-wrapper');
                 if (existingNote.length){
-                    existingNote.replaceWith(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, response.note_time, pluginId, response.new_note_index ));
+                    existingNote.replaceWith(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginId, response.new_note_index ));
                 }
 
                 // Attach delete and edit event handlers to new note
@@ -192,11 +185,11 @@ jQuery( document ).ready( function( $ ) {
                     editNote( noteToEdit, pluginId, response.new_note_index );
                 });
 
-                // Add target blank to a tags and convert date to readable format
-                processNotes();
+                // Add target blank to a tags
+                $('#' + pluginId + ' .pnp-plugin-note a').attr( 'target', '_blank' );
 
                 // Add new note to object
-                registerPluginNote( pluginId, response.new_note_index, response.processed_note, response.note_icon );
+                registerPluginNote( pluginId, response.new_note_index, response.processed_note, response.note_icon, response.note_time );
 
             },
             error: function( errorThrown ){
@@ -205,7 +198,7 @@ jQuery( document ).ready( function( $ ) {
         });
     });
 
-    function singleNoteMarkup( note, icon, user, time, pluginId, index ) {
+    function singleNoteMarkup( note, icon, user, pluginId, index ) {
 
         note = note.replace(/\n/g, "<br />"); // maintain line breaks
 
@@ -214,7 +207,7 @@ jQuery( document ).ready( function( $ ) {
         markup += '<div class="pnp-plugin-note">';
         markup += '<span class="dashicons ' + icon + '"></span>';
         markup += note;
-        markup += '<p class="pnp-note-meta">' + user + ' | <span class="pnp-convert-time">' + time + '</span></p>';
+        markup += '<p class="pnp-note-meta">' + user + ' | <span class="pnp-noteigt -time"></span></p>';
         markup += '</div>';
         markup += '<a href="#" class="pnp-edit-note">' + params.edit_text + '</a> | ';
         markup += '<a href="#" class="pnp-delete-note">' + params.delete_text + '</a>';
@@ -270,6 +263,5 @@ jQuery( document ).ready( function( $ ) {
         deleteNote(pluginId, noteId, noteIndex);
 
     });
-
 
 });
