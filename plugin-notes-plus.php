@@ -14,7 +14,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Plugin Notes Plus
- * Plugin URI:        https://jamiebergen.com/
+ * Plugin URI:        https://jamiebergen.com/plugin-notes-plus/
  * Description:       Adds a column for plugin notes.
  * Version:           1.0.0
  * Author:            Jamie Bergen
