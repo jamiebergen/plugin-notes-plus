@@ -15,6 +15,7 @@ Adds a column to the Plugins page where you can add, edit, or delete notes about
 Have you ever returned to a site that you built a while back and asked, "Dude, why did I install this plugin?" This plugin provides an extra column on the Plugins page that enables you to add, edit, or delete notes about the plugins you have installed on a particular site. These notes are intended to provide documentation regarding why a particular plugin was installed and how or where it's being used.
 
 Features
+
 * Add as many or as few notes as you need for each plugin.
 * Edit or delete notes as desired.
 * Select an icon to go with each note to quickly convey what type of content it contains (e.g., info, warning, link, etc.)
@@ -30,9 +31,9 @@ Features
 == Frequently Asked Questions ==
 = Can I modify which icons are available to display next to plugin notes? =
 
-Yes, you can use the filter plugin-notes-plus_icon_options to modify the set of icons available. The icons must be selected from here: https://developer.wordpress.org/resource/dashicons/
+Yes, you can use the filter plugin-notes-plus_icon_options to modify the set of icons available. The icons must be selected from [the list of available WordPress dashicons](https://developer.wordpress.org/resource/dashicons/).
 
-Here is an example of a snippet that removes one icon and adds an additional icon to the list of options. It can be added to your the child theme's functions.php:
+Here is an example of a snippet that removes one icon and adds an additional icon to the list of options. It can be added to your child theme's functions.php:
 
 `function pnp_change_icon_options( $icon_options ) {
 
