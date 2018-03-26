@@ -46,6 +46,15 @@ class Plugin_Notes_Plus {
 	protected $version;
 
 	/**
+	 * The db table name.
+	 *
+	 * @since    1.1.0
+	 * @access   protected
+	 * @var      string    $version    The db table name without the prefix.
+	 */
+	protected $table_name;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -61,6 +70,7 @@ class Plugin_Notes_Plus {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'plugin-notes-plus';
+		$this->table_name = 'plugin_notes_plus';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -133,7 +143,7 @@ class Plugin_Notes_Plus {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Plugin_Notes_Plus_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Plugin_Notes_Plus_Admin( $this->get_plugin_name(), $this->get_version(), $this->get_table_name() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -189,6 +199,16 @@ class Plugin_Notes_Plus {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	/**
+	 * Retrieve the db table name.
+	 *
+	 * @since     1.1.0
+	 * @return    string    The db table name without the prefix.
+	 */
+	public function get_table_name() {
+		return $this->table_name;
 	}
 
 }

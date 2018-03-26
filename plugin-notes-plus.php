@@ -35,7 +35,35 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
+// !!! increase to 1.1.0
 define( 'PLUGIN_NOTES_PLUS_VERSION', '1.0.0' );
+
+/**
+ * The code that runs during plugin activation.
+ * This action is documented in includes/class-plugin-name-activator.php
+ */
+
+global $plugin_notes_plus_db_version;
+$plugin_notes_plus_db_version = '1.0';
+
+function activate_plugin_notes_plus() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-plugin-notes-plus-activator.php';
+	Plugin_Notes_Plus_Activator::activate();
+}
+register_activation_hook( __FILE__, 'activate_plugin_notes_plus' );
+
+/**
+ * The code that runs on plugin update.
+ * Migrates data out of _options and into new custom table if upgrading from 1.0.0
+ */
+function plugin_notes_plus_migrate_to_table() {
+
+	if ( !get_site_option( 'plugin_notes_plus_db_version' ) ) {
+		activate_plugin_notes_plus();
+	}
+
+}
+add_action( 'plugins_loaded', 'plugin_notes_plus_migrate_to_table' );
 
 /**
  * The core plugin class that is used to define internationalization,

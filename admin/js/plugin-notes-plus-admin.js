@@ -1,7 +1,7 @@
 // Store all notes in a global variable for easy access
 var pluginNotes = {};
-function registerPluginNote( pluginId, noteIndex, noteContent, noteIcon, noteTime ) {
-    uniqueId = pluginId + '-' + noteIndex;
+function registerPluginNote( pluginIdSanitized, noteDbId, noteContent, noteIcon, noteTime ) {
+    noteCssId = pluginIdSanitized + '_' + noteDbId;
 
     // Convert time to readable format and insert into span
     var d = new Date(noteTime * 1000);
@@ -10,9 +10,9 @@ function registerPluginNote( pluginId, noteIndex, noteContent, noteIcon, noteTim
     var year = d.getFullYear();
     var formattedDate = year + '-' + month + '-' + date;
 
-    jQuery('#' + uniqueId + ' .pnp-note-time').html(formattedDate);
+    jQuery('#' + noteCssId + ' .pnp-note-time').html(formattedDate);
 
-    pluginNotes[uniqueId] = {
+    pluginNotes[noteCssId] = {
         note: noteContent,
         icon: noteIcon
     };
@@ -25,7 +25,7 @@ jQuery( document ).ready( function( $ ) {
      * The file is enqueued from admin/class-plugin-notes-plus-admin.php.
      */
 
-    function deleteNote( pluginId, noteId, noteIndex ) {
+    function deleteNote( noteCssId, noteDbId ) {
 
         if (confirm(params.confirm_delete)) {
             // This does the ajax request
@@ -33,13 +33,12 @@ jQuery( document ).ready( function( $ ) {
                 url: params.ajaxurl,
                 data: {
                     'action': 'pnp_delete_response',
-                    'pluginId' : pluginId,
-                    'noteIndex' : noteIndex,
+                    'noteId' : noteDbId,
                     'security' : params.ajax_nonce
                 },
                 success:function( data ) {
                     // This outputs the result of the ajax request
-                    $('#' + noteId + '.pnp-show-note-wrapper').remove();
+                    $('#' + noteCssId + '.pnp-show-note-wrapper').remove();
 
                 },
                 error: function( errorThrown ){
@@ -50,7 +49,7 @@ jQuery( document ).ready( function( $ ) {
         return false;
     }
 
-    function editNote( noteToEdit, pluginId, noteIndex ) {
+    function editNote( noteToEdit, pluginIdSanitized, noteDbId ) {
 
         noteToEdit.hide();
 
@@ -59,8 +58,8 @@ jQuery( document ).ready( function( $ ) {
 
         var editNoteForm = noteToEdit.next('.pnp-note-form-wrapper');
 
-        var noteContent = pluginNotes[pluginId + "-" + noteIndex].note;
-        var noteIcon = pluginNotes[pluginId + "-" + noteIndex].icon;
+        var noteContent = pluginNotes[pluginIdSanitized + "_" + noteDbId].note;
+        var noteIcon = pluginNotes[pluginIdSanitized + "_" + noteDbId].icon;
 
         editNoteForm.find('.pnp-note-form').val(noteContent);
         editNoteForm.find('.select-dashicon-for-note').val(noteIcon);
@@ -109,7 +108,8 @@ jQuery( document ).ready( function( $ ) {
         event.preventDefault();
 
         // Get plugin ID and basic info for new note
-        var pluginId = $(this).closest('.pnp-wrapper').attr('id');
+        var pluginId = $(this).closest('.pnp-wrapper').attr('data-pluginfile');
+        var pluginIdSanitized = $(this).closest('.pnp-wrapper').attr('id');
         var noteContent = $(this).siblings('.pnp-note-form').val();
         var noteIcon = $(this).siblings().find('.select-dashicon-for-note').val();
 
@@ -119,14 +119,14 @@ jQuery( document ).ready( function( $ ) {
             return false;
         }
 
-        // Get existing note index if available (for case of edit)
-        var noteIndex = '';
+        // Get existing note id if available (for case of edit)
+        var noteDbId = '';
         var noteToEdit = $(this).closest('.pnp-note-form-wrapper').prev('.pnp-show-note-wrapper');
 
         if (noteToEdit.length) {
-            var noteId = noteToEdit.attr('id');
-            var start = noteId.lastIndexOf('-') + 1;
-            noteIndex = noteId.substr(start);
+            var noteCssId = noteToEdit.attr('id');
+            var start = noteCssId.lastIndexOf('_') + 1;
+            noteDbId = noteCssId.substr(start);
         }
 
         // Get handle on form for after the request
@@ -145,7 +145,7 @@ jQuery( document ).ready( function( $ ) {
                 'action': 'pnp_add_response',
                 'note' : noteContent,
                 'icon' : noteIcon,
-                'index' : noteIndex,
+                'noteId' : noteDbId, // will be '' if not in db yet
                 'pluginId' : pluginId,
 				'security' : params.ajax_nonce
             },
@@ -160,36 +160,37 @@ jQuery( document ).ready( function( $ ) {
                 var addNoteLink = noteForm.siblings('.pnp-add-note');
                 if (addNoteLink.length){
                     // Add new note to end of notes list
-                    $(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginId, response.new_note_index )).insertBefore('#' + pluginId + ' .pnp-add-note-wrapper');
+                    $(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginIdSanitized, response.new_note_id )).insertBefore('#' + pluginIdSanitized + ' .pnp-add-note-wrapper');
                     addNoteLink.show();
                 }
                 // Case where user edits existing note
                 var existingNote = noteForm.prev('.pnp-show-note-wrapper');
                 if (existingNote.length){
-                    existingNote.replaceWith(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginId, response.new_note_index ));
+                    existingNote.replaceWith(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginIdSanitized, response.new_note_id ));
                 }
 
                 // Attach delete and edit event handlers to new note
-                var noteId = pluginId + '-' + response.new_note_index;
+                // Note that this variable is defined above for the case of edit...
+                var noteCssId = pluginIdSanitized + '_' + response.new_note_id;
 
-                $('#' + noteId + ' .pnp-delete-note').click( function( event ) {
+                $('#' + noteCssId + ' .pnp-delete-note').click( function( event ) {
 
                     event.preventDefault();
-                    deleteNote(pluginId, noteId, response.new_note_index);
+                    deleteNote( noteCssId, response.new_note_id );
                 });
 
-                $('#' + noteId + ' .pnp-edit-note').click( function( event ) {
+                $('#' + noteCssId + ' .pnp-edit-note').click( function( event ) {
 
                     event.preventDefault();
                     var noteToEdit = $(this).closest('.pnp-show-note-wrapper');
-                    editNote( noteToEdit, pluginId, response.new_note_index );
+                    editNote( noteToEdit, pluginIdSanitized, response.new_note_id )
                 });
 
                 // Add target blank to a tags
-                $('#' + pluginId + ' .pnp-plugin-note a').attr( 'target', '_blank' );
+                $('#' + pluginIdSanitized + ' .pnp-plugin-note a').attr( 'target', '_blank' );
 
                 // Add new note to object
-                registerPluginNote( pluginId, response.new_note_index, response.processed_note, response.note_icon, response.note_time );
+                registerPluginNote( pluginIdSanitized, response.new_note_id, response.processed_note, response.note_icon, response.note_time );
 
             },
             error: function( errorThrown ){
@@ -198,12 +199,12 @@ jQuery( document ).ready( function( $ ) {
         });
     });
 
-    function singleNoteMarkup( note, icon, user, pluginId, index ) {
+    function singleNoteMarkup( note, icon, user, pluginIdSanitized, noteDbId ) {
 
         note = note.replace(/\n/g, "<br />"); // maintain line breaks
 
         var markup = '';
-        markup += '<div class="pnp-show-note-wrapper" id="' + pluginId + '-' + index + '">';
+        markup += '<div class="pnp-show-note-wrapper" id="' + pluginIdSanitized + '_' + noteDbId + '">';
         markup += '<div class="pnp-plugin-note">';
         markup += '<span class="dashicons ' + icon + '"></span>';
         markup += note;
@@ -222,12 +223,13 @@ jQuery( document ).ready( function( $ ) {
 
         var noteToEdit = $(this).closest('.pnp-show-note-wrapper');
 
-        var pluginId = $(this).closest('.pnp-wrapper').attr('id');
-        var noteId = noteToEdit.attr('id');
-        var start = noteId.lastIndexOf('-') + 1;
-        var noteIndex = noteId.substr(start);
+        var pluginIdSanitized = $(this).closest('.pnp-wrapper').attr('id');
 
-        editNote( noteToEdit, pluginId, noteIndex );
+        var noteCssId = noteToEdit.attr('id');
+        var start = noteCssId.lastIndexOf('_') + 1;
+        var noteDbId = noteCssId.substr(start);
+
+        editNote( noteToEdit, pluginIdSanitized, noteDbId );
 
     });
 
@@ -255,12 +257,11 @@ jQuery( document ).ready( function( $ ) {
 
         event.preventDefault();
 
-        var pluginId = $(this).closest('.pnp-wrapper').attr('id');
-        var noteId = $(this).closest('.pnp-show-note-wrapper').attr('id');
-        var start = noteId.lastIndexOf('-') + 1;
-        var noteIndex = noteId.substr(start);
+        var noteCssId = $(this).closest('.pnp-show-note-wrapper').attr('id');
+        var start = noteCssId.lastIndexOf('_') + 1;
+        var noteDbId = noteCssId.substr(start);
 
-        deleteNote(pluginId, noteId, noteIndex);
+        deleteNote( noteCssId, noteDbId );
 
     });
 

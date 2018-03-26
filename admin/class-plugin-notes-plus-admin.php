@@ -27,6 +27,15 @@ class Plugin_Notes_Plus_Admin {
 	private $plugin_name;
 
 	/**
+	 * The db table name.
+	 *
+	 * @since    1.1.0
+	 * @access   private
+	 * @var      string    $table_name    The db table name without the prefix.
+	 */
+	private $table_name;
+
+	/**
 	 * The version of this plugin.
 	 *
 	 * @since    1.0.0
@@ -50,12 +59,14 @@ class Plugin_Notes_Plus_Admin {
 	 *
 	 * @since    1.0.0
 	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
+	 * @param      string    $version           The version of this plugin.
+	 * @param      string    $table_name        The db table name.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct( $plugin_name, $version, $table_name ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->table_name = $table_name;
 	}
 
 	/**
@@ -123,12 +134,14 @@ class Plugin_Notes_Plus_Admin {
 
 	/**
 	 * Generate a unique id for a plugin based on the plugin's filepath.
+	 * Fixed to account for backslash in Windows paths
 	 *
 	 * @since    1.0.0
 	 */
 	public function get_plugin_unique_id( $plugin_file ) {
-		return 'plugin_notes_plus_' . sanitize_title( $plugin_file );
+		return wp_normalize_path( $plugin_file );
 	}
+
 
 	/**
 	 * Display the plugin note(s) for a given plugin.
@@ -137,14 +150,17 @@ class Plugin_Notes_Plus_Admin {
 	 */
 	public function display_plugin_note( $column_name, $plugin_file, $plugin_data ) {
 
-		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_file );
-		$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $plugin_unique_id  );
-
 		if ( 'pnp_plugin_notes_col' == $column_name ) {
+
+			$plugin_unique_id = $this->get_plugin_unique_id( $plugin_file );
+			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $plugin_unique_id, $this->table_name  );
 
 			$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
 			ksort($the_plugin_notes);
+
 			$icon_options_array = apply_filters( 'plugin-notes-plus_icon_options', self::$icon_options );
+			$plugin_unique_id_sanitized = preg_replace( '/[^a-zA-Z0-9_-]/', '-', 'pnp_' . $plugin_unique_id );
+
 			include( 'partials/plugin-note-markup.php' );
 
 		}
@@ -167,25 +183,23 @@ class Plugin_Notes_Plus_Admin {
 			$icon = $_REQUEST['icon'];
 			$pluginId = $_REQUEST['pluginId'];
 
-			$index = $_REQUEST['index'];
+			$noteId = $_REQUEST['noteId'];
 
 			$user = wp_get_current_user()->display_name;
 
 			// Create object and create_plugin_note
-			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $pluginId );
+			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $pluginId, $this->table_name );
 
-			if ($index !== '') {
-				$new_note_index = $plugin_note_obj->edit_plugin_note( $note, $icon, $index, $user );
-			} elseif ( $plugin_note_obj->has_plugin_note() ) {
-				$new_note_index = $plugin_note_obj->append_plugin_note( $note, $icon, $user );
+			if ( $noteId !== '' ) {
+				$new_note_id = $plugin_note_obj->edit_plugin_note( $note, $icon, $user, $noteId );
 			} else {
-				$new_note_index = $plugin_note_obj->initialize_plugin_notes( $note, $icon, $user );
+				$new_note_id = $plugin_note_obj->add_plugin_note( $note, $icon, $user );
 			}
 
-			$processed_note = $plugin_note_obj->get_plugin_note( $new_note_index );
+			$processed_note = $plugin_note_obj->get_plugin_note_by_id( $new_note_id );
 
 			$return = array(
-				'new_note_index'  => $new_note_index,
+				'new_note_id'     => $new_note_id,
 				'note_icon'       => $processed_note['icon'],
 				'processed_note'  => $processed_note['note'],
 				'note_user'       => $processed_note['user'],
@@ -196,6 +210,20 @@ class Plugin_Notes_Plus_Admin {
 		}
 		// Always die in functions echoing ajax content
 		die();
+
+	}
+
+	/**
+	 * Delete the plugin note by ID.
+	 *
+	 * @since    1.1.0
+	 */
+	public function delete_plugin_note_by_id( $index ) {
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . $this->table_name;
+
+		$wpdb->delete( $table_name, array( 'id' => $index ) );
 
 	}
 
@@ -212,14 +240,8 @@ class Plugin_Notes_Plus_Admin {
 			// Check nonce and die if any funny business is detected
 			check_ajax_referer( 'pnp_add_plugin_note_form_nonce', 'security' );
 
-			$pluginId = $_REQUEST['pluginId'];
-			$noteIndex = $_REQUEST['noteIndex'];
-
-			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $pluginId );
-
-			if ( $plugin_note_obj->has_plugin_note() ) {
-				$plugin_note_obj->delete_plugin_note( $noteIndex );
-			}
+			$note_id = $_REQUEST['noteId'];
+			$this->delete_plugin_note_by_id( $note_id );
 		}
 		// Always die in functions echoing ajax content
 		die();

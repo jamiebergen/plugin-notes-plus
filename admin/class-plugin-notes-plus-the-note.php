@@ -25,6 +25,15 @@ class Plugin_Notes_Plus_The_Note {
 	private $plugin_unique_id;
 
 	/**
+	 * The db table name.
+	 *
+	 * @since    1.1.0
+	 * @access   private
+	 * @var      string    $table_name    The db table name without the prefix.
+	 */
+	private $table_name;
+
+	/**
 	 * A list of allowed tags.
 	 *
 	 * @since    1.0.0
@@ -52,52 +61,22 @@ class Plugin_Notes_Plus_The_Note {
 	 *
 	 * @since    1.0.0
 	 * @param    string    $plugin_unique_id      The name of the plugin associated with the note.
+	 * @param    string    $table_name            The db table name without the prefix.
 	 */
-	public function __construct( $plugin_unique_id ) {
+	public function __construct( $plugin_unique_id, $table_name ) {
 
 		$this->plugin_unique_id = $plugin_unique_id;
+		$this->table_name = $table_name;
 		$this->allowed_tags = apply_filters( 'plugin-notes-plus_allowed_html', $this->allowed_tags );
 	}
 
 	/**
-	 * Check to see whether this plugin already has a note.
+	 * Retrieve the plugin note or notes from the options table
+	 * Used for migration from options to custom table
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 */
-	public function has_plugin_note() {
-
-		$the_note = get_option( $this->plugin_unique_id );
-
-		$option_set_but_empty = ('' === $the_note);
-
-		return ( $the_note || $option_set_but_empty );
-	}
-
-	/**
-	 * Get a specific plugin note.
-	 *
-	 * @since    1.0.0
-	 */
-	public function get_plugin_note( $index ) {
-
-		$note_array = get_option( $this->plugin_unique_id )[$index];
-
-		$note_output_array = array();
-		$note_output_array['note'] = $this->process_plugin_note( $note_array['note'] );
-		$note_output_array['icon'] = $note_array['icon'];
-		$note_output_array['user'] = $note_array['user'];
-		$note_output_array['time'] = $note_array['time'];
-
-		return $note_output_array;
-	}
-
-	/**
-	 * Get the plugin note or notes.
-	 *
-	 * @since    1.0.0
-	 */
-	public function get_plugin_notes() {
-
+	public function retrieve_notes_from_options() {
 		$notes_array = get_option( $this->plugin_unique_id );
 
 		$notes_output_array = array();
@@ -110,105 +89,155 @@ class Plugin_Notes_Plus_The_Note {
 				$notes_output_array[$index]['time'] = $note_array['time'];
 			}
 		}
+
 		return $notes_output_array;
 	}
 
 	/**
-	 * Create a new database entry and add the plugin's first note.
+	 * Get a specific plugin note by id.
 	 *
-	 * @since    1.0.0
-	 */
-	public function initialize_plugin_notes( $note_text, $icon_class, $username ) {
-
-		$note_time = time();
-
-		$single_note = $this->set_up_plugin_note_array( $note_text, $icon_class, $username, $note_time );
-
-		// add random num at end of time to ensure that two entries at the same time won't overlap
-		$note_index = $note_time . '_' . rand( 10, 99 );
-
-		$notes_array = array();
-		$notes_array[$note_index] = $single_note;
-
-		add_option( $this->plugin_unique_id, $notes_array );
-		return $note_index;
-	}
-
-	/**
-	 * Append additional notes to a plugin's existing entry.
+	 * @since    1.1.0
 	 *
-	 * @since    1.0.0
 	 */
-	public function append_plugin_note( $note_text, $icon_class, $username ) {
+	public function get_plugin_note_by_id( $note_id ) {
 
-		$note_time = time();
+		global $wpdb;
+		$table_name = $wpdb->prefix . $this->table_name;
 
-		$new_note_array = $this->set_up_plugin_note_array( $note_text, $icon_class, $username, $note_time );
-
-		$note_index = $note_time . '_' . rand( 10, 99 );
-
-		$notes_array = get_option( $this->plugin_unique_id );
-		$notes_array[$note_index] = $new_note_array;
-
-		update_option( $this->plugin_unique_id, $notes_array );
-		return $note_index;
-	}
-
-	/**
-	 * Edit an existing plugin note.
-	 *
-	 * @since    1.0.0
-	 */
-	public function edit_plugin_note( $note_text, $icon_class, $note_index, $username ) {
-
-		//$note_time = substr( $note_index, 0, -3 );
-
-		$note_time = time(); // update time for edited note
-
-		$edited_note_array = $this->set_up_plugin_note_array( $note_text, $icon_class, $username, $note_time );
-
-		$notes_array = get_option( $this->plugin_unique_id );
-		$notes_array[$note_index] = $edited_note_array;
-
-		update_option( $this->plugin_unique_id, $notes_array );
-
-		return $note_index;
-	}
-
-	/**
-	 * Set up array with the plugin note and meta info.
-	 *
-	 * @since    1.0.0
-	 */
-	protected function set_up_plugin_note_array( $note_text, $icon_class, $username, $note_time ) {
-
-		$processed_note = $this->process_plugin_note( $note_text );
+		$result = $wpdb->get_row( $wpdb->prepare(
+			"SELECT * FROM $table_name WHERE ID = %d;",
+			$note_id
+		) );
 
 		$note_array = array();
-		$note_array['note'] = $processed_note;
-		$note_array['icon'] = $icon_class; // e.g., dashicons-info
-		$note_array['user'] = $username;
-		$note_array['time'] = $note_time; // GMT
+		$note_array['note'] = $this->process_plugin_note( $result->note_content );
+		$note_array['icon'] = $result->note_icon;
+		$note_array['user'] = $result->user_name;
+		$note_array['time'] = $result->time;
 
 		return $note_array;
 	}
 
 	/**
-	 * Delete the plugin note.
+	 * Get the plugin note or notes from the custom db table
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 */
-	public function delete_plugin_note( $index ) {
+	public function get_plugin_notes() {
 
-		$notes_array = get_option( $this->plugin_unique_id );
-		unset( $notes_array[$index] );
-		update_option( $this->plugin_unique_id, $notes_array );
+		$notes_output_array = array();
 
-		// Delete entire entry if the last note has been deleted
-		if ( empty($notes_array) ) {
-			delete_option( $this->plugin_unique_id );
+		global $wpdb;
+		$table_name = $wpdb->prefix . $this->table_name;
+
+		$results = $wpdb->get_results( $wpdb->prepare(
+			"SELECT * FROM $table_name WHERE plugin_id LIKE %s;",
+			$this->plugin_unique_id
+		) );
+
+		foreach( $results as $key => $row ) {
+
+			$index = $row->id;
+			$note = $row->note_content;
+			$icon = $row->note_icon;
+			$user = $row->user_name;
+			$time = $row->time;
+
+			$notes_output_array[$index]['note'] = $this->process_plugin_note( $note );
+			$notes_output_array[$index]['icon'] = $icon;
+			$notes_output_array[$index]['user'] = $user;
+			$notes_output_array[$index]['time'] = $time;
 		}
 
+		return $notes_output_array;
+	}
+
+	/**
+	 * Migrate plugin note from options to new database table.
+	 * Assign a new id based on normalized filepath
+	 *
+	 * @since    1.1.0
+	 */
+	public function migrate_plugin_note( $new_id, $note_text, $icon_class, $username, $note_time ) {
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . $this->table_name;
+
+		$wpdb->insert(
+			$table_name,
+			array(
+				'plugin_id' => $new_id,
+				'note_content' => $note_text,
+				'note_icon' => $icon_class,
+				'user_name' => $username,
+				'time' => $note_time,
+			)
+		);
+
+		return $wpdb->insert_id;
+	}
+
+	/**
+	 * Create a new database entry for a plugin note.
+	 *
+	 * @since    1.1.0
+	 */
+	public function add_plugin_note( $note_text, $icon_class, $username ) {
+
+		$note_time = time();
+
+		$processed_note = $this->process_plugin_note( $note_text );
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . $this->table_name;
+
+		$wpdb->insert(
+			$table_name,
+			array(
+				'plugin_id' => $this->plugin_unique_id,
+				'note_content' => $processed_note,
+				'note_icon' => $icon_class,
+				'user_name' => $username,
+				'time' => $note_time,
+			)
+		);
+
+		return $wpdb->insert_id;
+	}
+
+	/**
+	 * Edit an existing plugin note.
+	 *
+	 * @since    1.1.0
+	 */
+	public function edit_plugin_note( $note_text, $icon_class, $username,  $note_id ) {
+
+		$note_time = time(); // update time for edited note
+
+		$processed_note = $this->process_plugin_note( $note_text );
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . $this->table_name;
+
+		$wpdb->update(
+			$table_name,
+			array(
+				'note_content'  => $processed_note,	// string
+				'note_icon'     => $icon_class, // string
+				'user_name'     => $username,	// string
+				'time'          => $note_time,	// int
+			),
+			array( 'id' => $note_id ),
+			array(
+				'%s',	// note_content
+				'%s',	// note_icon
+				'%s',	// user_name
+				'%d',	// time
+			),
+			array( '%d' )
+		);
+
+		return $note_id;
 	}
 
 	/**
@@ -230,6 +259,7 @@ class Plugin_Notes_Plus_The_Note {
 	 * @param string $input
 	 * @return string
 	 *
+	 * @since    1.0.0
 	 */
 	protected function convert_urls_to_links( $input ) {
 
