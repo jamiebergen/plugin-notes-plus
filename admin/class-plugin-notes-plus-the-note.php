@@ -210,7 +210,7 @@ class Plugin_Notes_Plus_The_Note {
 	 *
 	 * @since    1.1.0
 	 */
-	public function edit_plugin_note( $note_text, $icon_class, $username,  $note_id ) {
+	public function edit_plugin_note( $note_text, $icon_class, $username, $note_id ) {
 
 		$note_time = time(); // update time for edited note
 

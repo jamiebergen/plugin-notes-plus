@@ -1,15 +1,4 @@
 <?php
-
-/**
- * Fired during plugin activation
- *
- * @link       http://example.com
- * @since      1.0.0
- *
- * @package    Plugin_Name
- * @subpackage Plugin_Name/includes
- */
-
 /**
  * Fired during plugin activation.
  *
@@ -32,7 +21,7 @@ class Plugin_Notes_Plus_Activator {
 
 	public static function migrate_old_notes( $old_id, $new_id ) {
 
-		$pnp_class = new Plugin_Notes_Plus();
+		$pnp_class = new Plugin_Notes_Plus(); // !!! better way???
 		$table_name = $pnp_class->get_table_name();
 
 		$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $old_id, $table_name );
