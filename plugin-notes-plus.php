@@ -58,7 +58,7 @@ register_activation_hook( __FILE__, 'activate_plugin_notes_plus' );
  */
 function plugin_notes_plus_migrate_to_table() {
 
-	if ( !get_site_option( 'plugin_notes_plus_db_version' ) ) {
+	if ( !get_option( 'plugin_notes_plus_db_version' ) ) {
 		activate_plugin_notes_plus();
 	}
 
