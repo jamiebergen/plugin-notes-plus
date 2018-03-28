@@ -67,7 +67,7 @@ add_filter( 'plugin-notes-plus_allowed_html', 'pnp_change_allowed_html_tags' );`
 
 = Where is the data stored? =
 
-As of version 1.1.0, plugin notes and note metadata are stored in a custom table whose name ends in plugin_notes_plus.
+As of version 1.1.0, plugin notes and note metadata are stored in a custom table whose name ends in `plugin_notes_plus`.
 
 = How does it work on multisite installs? =
 
@@ -76,8 +76,8 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 == Changelog ==
 
 = 1.1.0 =
-* Fixed: Bug that caused plugin notes to disappear on Windows due to discrepancies in the plugin file path related to forward vs. backslash. This update will recover missing notes. Thanks to @gwalsh66 for helping to identify this bug.
-* Changed: Plugin notes will now be stored in a custom table called $wpdb->prefix . 'plugin_notes_plus'
+* Fixed: Bug that caused plugin notes to disappear on Windows servers due to discrepancies in the plugin file path related to forward vs. backslash. This update will recover missing notes. Thanks to @gwalsh66 for helping to identify this bug.
+* Changed: Plugin notes will now be stored in a custom table called `$wpdb->prefix . 'plugin_notes_plus'`
 * Added: Migration routine to move notes from options table into their own table if upgrading from 1.0.0
 * Added: An entry in the _options table called 'plugin_notes_plus_db_version' to track the custom database table version
 
