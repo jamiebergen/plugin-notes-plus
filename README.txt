@@ -3,9 +3,9 @@ Contributors: jamiebergen
 Tags: plugins, plugin notes, memo
 Donate link: https://jamiebergen.com/donate/
 Requires at least: 4.0
-Tested up to: 4.9.2
+Tested up to: 4.9.4
 Requires PHP: 5.5.24
-Stable tag: trunk
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,8 +67,24 @@ add_filter( 'plugin-notes-plus_allowed_html', 'pnp_change_allowed_html_tags' );`
 
 = Where is the data stored? =
 
-Plugin notes are stored in the options table. Each plugin with note(s) is given a separate entry that stores all of that plugin's notes and note metadata.
+As of version 1.1.0, plugin notes and note metadata are stored in a custom table whose name ends in plugin_notes_plus.
 
 = How does it work on multisite installs? =
 
-Each site within a multisite install maintains its own plugin notes. Additionally, the superadmin can maintain his/her own plugin notes.
+Each site within a multisite install maintains its own plugin notes. Additionally, the superadmin can maintain their own plugin notes.
+
+== Changelog ==
+
+= 1.1.0 =
+* Fixed: Bug that caused plugin notes to disappear on Windows due to discrepancies in the plugin file path related to forward vs. backslash. This update will recover missing notes. Thanks to @gwalsh66 for helping to identify this bug.
+* Changed: Plugin notes will now be stored in a custom table called $wpdb->prefix . 'plugin_notes_plus'
+* Added: Migration routine to move notes from options table into their own table if upgrading from 1.0.0
+* Added: An entry in the _options table called 'plugin_notes_plus_db_version' to track the custom database table version
+
+= 1.0.0 =
+* Initial release
+
+== Upgrade Notice ==
+
+= 1.1.0 =
+This version migrates plugin notes into their own database table and fixes a bug with plugin notes being incorrectly indexed on Windows servers.
