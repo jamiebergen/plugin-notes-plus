@@ -24,8 +24,8 @@ if ( current_user_can('activate_plugins') ) {
                         <span class="dashicons <?php echo $the_plugin_note['icon'] ?>"></span><?php echo nl2br( $the_plugin_note[ 'note' ] ); ?>
                         <p class="pnp-note-meta"><?php echo $the_plugin_note['user'] ?> | <span class="pnp-note-time"></span></p>
                     </div>
-                    <a href="#" class="pnp-edit-note"><?php esc_html_e( 'edit', $this->plugin_name ) ?></a> |
-                    <a href="#" class="pnp-delete-note"><?php esc_html_e( 'delete', $this->plugin_name ) ?></a>
+                    <a href="#" class="pnp-edit-note"><?php esc_html_e( 'edit', $this->plugin->get_plugin_name() ) ?></a> |
+                    <a href="#" class="pnp-delete-note"><?php esc_html_e( 'delete', $this->plugin->get_plugin_name() ) ?></a>
                 </div>
                 <script>
                     registerPluginNote( "<?php echo $plugin_unique_id_sanitized; ?>",
@@ -41,23 +41,23 @@ if ( current_user_can('activate_plugins') ) {
         }
         ?>
 		<div class="pnp-add-note-wrapper">
-			<a href="#" class="pnp-add-note"><?php esc_html_e( '+ Add plugin note', $this->plugin_name ) ?></a>
+			<a href="#" class="pnp-add-note"><?php esc_html_e( '+ Add plugin note', $this->plugin->get_plugin_name() ) ?></a>
 			<div class="pnp-note-form-wrapper">
 
                 <label>
-	                <?php esc_html_e( 'Note type:', $this->plugin_name ) ?>
+	                <?php esc_html_e( 'Note type:', $this->plugin->get_plugin_name() ) ?>
                     <span class="view-icon"></span>
                     <select id="<?php echo $plugin_unique_id_sanitized; ?>" class="select-dashicon-for-note">
                         <?php foreach ( $icon_options_array as $icon_class => $icon_name ) {
-                            echo '<option value="'. $icon_class . '">' . esc_html__( $icon_name, $this->plugin_name ) . '</option>';
+                            echo '<option value="'. $icon_class . '">' . esc_html__( $icon_name, $this->plugin->get_plugin_name() ) . '</option>';
                         } ?>
                     </select>
                 </label>
                 <textarea class="pnp-note-form"></textarea>
-				<a href="#" class="pnp-save-note"><?php esc_html_e( 'Save note', $this->plugin_name ) ?></a>
+				<a href="#" class="pnp-save-note"><?php esc_html_e( 'Save note', $this->plugin->get_plugin_name() ) ?></a>
                 <span class="pnp-spin dashicons dashicons-update"></span>
                 <span class="pnp-divider"> | </span>
-                <a href="#" class="pnp-cancel-note"><?php esc_html_e( 'Cancel', $this->plugin_name ) ?></a>
+                <a href="#" class="pnp-cancel-note"><?php esc_html_e( 'Cancel', $this->plugin->get_plugin_name() ) ?></a>
 				<div id="pnp_form_feedback"></div>
 			</div>
 		</div>
@@ -68,6 +68,6 @@ if ( current_user_can('activate_plugins') ) {
 }
 else {
 	?>
-	<p> <?php esc_html__("You are not authorized to perform this operation.", $this->plugin_name) ?> </p>
+	<p> <?php esc_html__( "You are not authorized to perform this operation.", $this->plugin->get_plugin_name() ) ?> </p>
 	<?php
 }

@@ -18,31 +18,13 @@
 class Plugin_Notes_Plus_Admin {
 
 	/**
-	 * The ID of this plugin.
+	 * A reference to the Plugin_Notes_Plus object.
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
+	 * @var      Plugin_Notes_Plus    $plugin    References the Plugin_Notes_Plus object for this plugin.
 	 */
-	private $plugin_name;
-
-	/**
-	 * The db table name.
-	 *
-	 * @since    1.1.0
-	 * @access   private
-	 * @var      string    $table_name    The db table name without the prefix.
-	 */
-	private $table_name;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
+	private $plugin;
 
 	/**
 	 * A list of icon options. See definition of $icon_options after
@@ -58,15 +40,11 @@ class Plugin_Notes_Plus_Admin {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version           The version of this plugin.
-	 * @param      string    $table_name        The db table name.
+	 *
 	 */
-	public function __construct( $plugin_name, $version, $table_name ) {
+	public function __construct( $plugin ) {
 
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
-		$this->table_name = $table_name;
+		$this->plugin = $plugin;
 	}
 
 	/**
@@ -87,7 +65,7 @@ class Plugin_Notes_Plus_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/plugin-notes-plus-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin->get_plugin_name(), plugin_dir_url( __FILE__ ) . 'css/plugin-notes-plus-admin.css', array(), $this->plugin->get_version(), 'all' );
 
 	}
 
@@ -112,12 +90,12 @@ class Plugin_Notes_Plus_Admin {
 		$params = array (
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'ajax_nonce' => wp_create_nonce( 'pnp_add_plugin_note_form_nonce' ), // this is a unique token to prevent form hijacking
-			'edit_text' => esc_html__( 'edit', $this->plugin_name ),
-			'delete_text' => esc_html__( 'delete', $this->plugin_name ),
-			'confirm_delete' => esc_html__( 'Are you sure you want to delete this note?', $this->plugin_name ),
-			'needs_content' => esc_html__( 'The note must contain content.', $this->plugin_name ),
+			'edit_text' => esc_html__( 'edit', $this->plugin->get_plugin_name() ),
+			'delete_text' => esc_html__( 'delete', $this->plugin->get_plugin_name() ),
+			'confirm_delete' => esc_html__( 'Are you sure you want to delete this note?', $this->plugin->get_plugin_name() ),
+			'needs_content' => esc_html__( 'The note must contain content.', $this->plugin->get_plugin_name() ),
 		);
-		wp_enqueue_script( 'pnp_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'pnp_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-admin.js', array( 'jquery' ), $this->plugin->get_version(), false );
 		wp_localize_script( 'pnp_ajax_handle', 'params', $params );
 
 	}
@@ -128,7 +106,7 @@ class Plugin_Notes_Plus_Admin {
 	 * @since    1.0.0
 	 */
 	public function add_plugin_notes_column( $columns ) {
-		$columns['pnp_plugin_notes_col'] =  esc_html__( 'Plugin Notes', $this->plugin_name );
+		$columns['pnp_plugin_notes_col'] =  esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() );
 		return $columns;
 	}
 
@@ -153,7 +131,7 @@ class Plugin_Notes_Plus_Admin {
 		if ( 'pnp_plugin_notes_col' == $column_name ) {
 
 			$plugin_unique_id = $this->get_plugin_unique_id( $plugin_file );
-			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $plugin_unique_id, $this->table_name  );
+			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $plugin_unique_id );
 
 			$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
 			ksort($the_plugin_notes);
@@ -188,7 +166,7 @@ class Plugin_Notes_Plus_Admin {
 			$user = wp_get_current_user()->display_name;
 
 			// Create object and create_plugin_note
-			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $pluginId, $this->table_name );
+			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $pluginId );
 
 			if ( $noteId !== '' ) {
 				$new_note_id = $plugin_note_obj->edit_plugin_note( $note, $icon, $user, $noteId );
@@ -221,7 +199,7 @@ class Plugin_Notes_Plus_Admin {
 	public function delete_plugin_note_by_id( $index ) {
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->table_name;
+		$table_name = $wpdb->prefix . $this->plugin->get_table_name();
 
 		$wpdb->delete( $table_name, array( 'id' => $index ) );
 
@@ -250,10 +228,10 @@ class Plugin_Notes_Plus_Admin {
 }
 
 Plugin_Notes_Plus_Admin::$icon_options = array(
-	'dashicons-clipboard' => esc_html__( 'Note', $this->plugin_name ),
-	'dashicons-info' => esc_html__( 'Info', $this->plugin_name ),
-	'dashicons-admin-links' => esc_html__( 'Link', $this->plugin_name ),
-	'dashicons-warning' => esc_html__( 'Warning', $this->plugin_name ),
-	'dashicons-admin-network' => esc_html__( 'Key', $this->plugin_name ),
-	'dashicons-yes' => esc_html__( 'Checkmark', $this->plugin_name ),
+	'dashicons-clipboard' => esc_html__( 'Note', Plugin_Notes_Plus::get_plugin_name() ),
+	'dashicons-info' => esc_html__( 'Info', Plugin_Notes_Plus::get_plugin_name() ),
+	'dashicons-admin-links' => esc_html__( 'Link', Plugin_Notes_Plus::get_plugin_name() ),
+	'dashicons-warning' => esc_html__( 'Warning', Plugin_Notes_Plus::get_plugin_name() ),
+	'dashicons-admin-network' => esc_html__( 'Key', Plugin_Notes_Plus::get_plugin_name() ),
+	'dashicons-yes' => esc_html__( 'Checkmark', Plugin_Notes_Plus::get_plugin_name() ),
 );

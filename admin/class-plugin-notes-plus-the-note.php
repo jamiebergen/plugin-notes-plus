@@ -25,15 +25,6 @@ class Plugin_Notes_Plus_The_Note {
 	private $plugin_unique_id;
 
 	/**
-	 * The db table name.
-	 *
-	 * @since    1.1.0
-	 * @access   private
-	 * @var      string    $table_name    The db table name without the prefix.
-	 */
-	private $table_name;
-
-	/**
 	 * A list of allowed tags.
 	 *
 	 * @since    1.0.0
@@ -61,12 +52,10 @@ class Plugin_Notes_Plus_The_Note {
 	 *
 	 * @since    1.0.0
 	 * @param    string    $plugin_unique_id      The name of the plugin associated with the note.
-	 * @param    string    $table_name            The db table name without the prefix.
 	 */
-	public function __construct( $plugin_unique_id, $table_name ) {
+	public function __construct( $plugin_unique_id ) {
 
 		$this->plugin_unique_id = $plugin_unique_id;
-		$this->table_name = $table_name;
 		$this->allowed_tags = apply_filters( 'plugin-notes-plus_allowed_html', $this->allowed_tags );
 	}
 
@@ -102,7 +91,7 @@ class Plugin_Notes_Plus_The_Note {
 	public function get_plugin_note_by_id( $note_id ) {
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->table_name;
+		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
 		$result = $wpdb->get_row( $wpdb->prepare(
 			"SELECT * FROM $table_name WHERE ID = %d;",
@@ -128,7 +117,7 @@ class Plugin_Notes_Plus_The_Note {
 		$notes_output_array = array();
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->table_name;
+		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
 		$results = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $table_name WHERE plugin_id LIKE %s;",
@@ -161,7 +150,7 @@ class Plugin_Notes_Plus_The_Note {
 	public function migrate_plugin_note( $new_id, $note_text, $icon_class, $username, $note_time ) {
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->table_name;
+		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
 		$wpdb->insert(
 			$table_name,
@@ -189,7 +178,7 @@ class Plugin_Notes_Plus_The_Note {
 		$processed_note = $this->process_plugin_note( $note_text );
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->table_name;
+		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
 		$wpdb->insert(
 			$table_name,
@@ -217,7 +206,7 @@ class Plugin_Notes_Plus_The_Note {
 		$processed_note = $this->process_plugin_note( $note_text );
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->table_name;
+		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
 		$wpdb->update(
 			$table_name,

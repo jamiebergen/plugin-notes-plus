@@ -21,10 +21,7 @@ class Plugin_Notes_Plus_Activator {
 
 	public static function migrate_old_notes( $old_id, $new_id ) {
 
-		$pnp_class = new Plugin_Notes_Plus(); // !!! better way???
-		$table_name = $pnp_class->get_table_name();
-
-		$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $old_id, $table_name );
+		$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $old_id );
 		$plugin_notes = $plugin_note_obj->retrieve_notes_from_options();
 
 		if ( empty( $plugin_notes ) ) {
@@ -48,7 +45,7 @@ class Plugin_Notes_Plus_Activator {
 		global $wpdb;
 		global $plugin_notes_plus_db_version;
 
-		$table_name = $wpdb->prefix . 'plugin_notes_plus';
+		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE $table_name (
