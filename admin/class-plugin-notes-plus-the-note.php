@@ -156,7 +156,7 @@ class Plugin_Notes_Plus_The_Note {
 			$table_name,
 			array(
 				'plugin_id' => $new_id,
-				'note_content' => $note_text,
+				'note_content' => $this->process_plugin_note( $note_text ),
 				'note_icon' => $icon_class,
 				'user_name' => $username,
 				'time' => $note_time,

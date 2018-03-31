@@ -78,8 +78,8 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 = 1.1.0 =
 * Fixed: Bug that caused plugin notes to disappear on Windows servers due to discrepancies in the plugin file path related to forward vs. backslash. This update will recover missing notes. Thanks to @gwalsh66 for helping to identify this bug.
 * Changed: Plugin notes will now be stored in a custom table called `$wpdb->prefix . 'plugin_notes_plus'`
-* Added: Migration routine to move notes from options table into their own table if upgrading from 1.0.0
-* Added: An entry in the _options table called 'plugin_notes_plus_db_version' to track the custom database table version
+* Added: Migration routine to move notes from the options table into their own table if upgrading from version 1.0.0
+* Added: Entry in the options table called 'plugin_notes_plus_db_version' to track the custom database table version
 
 = 1.0.0 =
 * Initial release
@@ -87,4 +87,4 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 == Upgrade Notice ==
 
 = 1.1.0 =
-This version migrates plugin notes into their own database table and fixes a bug with plugin notes being incorrectly indexed on Windows servers.
+This version migrates plugin notes into their own database table and fixes a bug with plugin notes disappearing on Windows servers.

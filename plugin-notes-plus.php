@@ -33,7 +33,6 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Current plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
- * Rename this for your plugin and update it as you release new versions.
  */
 define( 'PLUGIN_NOTES_PLUS_VERSION', '1.1.0' );
 
@@ -41,7 +40,6 @@ define( 'PLUGIN_NOTES_PLUS_VERSION', '1.1.0' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-plugin-name-activator.php
  */
-
 global $plugin_notes_plus_db_version;
 $plugin_notes_plus_db_version = '1.0';
 
@@ -60,7 +58,6 @@ function plugin_notes_plus_migrate_to_table() {
 	if ( !get_option( 'plugin_notes_plus_db_version' ) ) {
 		activate_plugin_notes_plus();
 	}
-
 }
 add_action( 'plugins_loaded', 'plugin_notes_plus_migrate_to_table' );
 
