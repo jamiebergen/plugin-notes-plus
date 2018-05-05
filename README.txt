@@ -5,7 +5,7 @@ Donate link: https://jamiebergen.com/donate/
 Requires at least: 4.0
 Tested up to: 4.9.4
 Requires PHP: 5.5.24
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,13 +67,16 @@ add_filter( 'plugin-notes-plus_allowed_html', 'pnp_change_allowed_html_tags' );`
 
 = Where is the data stored? =
 
-As of version 1.1.0, plugin notes and note metadata are stored in a custom table whose name ends in `plugin_notes_plus`.
+Plugin notes and note metadata are stored in a custom table whose name ends in `plugin_notes_plus`. In the initial version (1.0.0), notes were stored in the options table. Version 1.1.0 was released to migrate existing notes from the options table into the `plugin_notes_plus` table. Upgrading to version 1.1.1 will perform a cleanup, removing any notes from the options table.
 
 = How does it work on multisite installs? =
 
 Each site within a multisite install maintains its own plugin notes. Additionally, the superadmin can maintain their own plugin notes.
 
 == Changelog ==
+
+= 1.1.0 =
+* Added: Cleanup routine to remove notes from the options table. (If upgrading from 1.0.0, notes will first be migrated into their own table.)
 
 = 1.1.0 =
 * Fixed: Bug that caused plugin notes to disappear on Windows servers due to discrepancies in the plugin file path related to forward vs. backslash. This update will recover missing notes. Thanks to @gwalsh66 for helping to identify this bug.
@@ -85,6 +88,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+This version does some behind-the-scenes cleanup to the options table to improve performance. It should not affect your existing notes or the functionality of the plugin.
 
 = 1.1.0 =
 This version migrates plugin notes into their own database table and fixes a bug with plugin notes disappearing on Windows servers.

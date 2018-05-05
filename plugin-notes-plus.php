@@ -16,7 +16,7 @@
  * Plugin Name:       Plugin Notes Plus
  * Plugin URI:        https://jamiebergen.com/plugin-notes-plus/
  * Description:       Adds a column for plugin notes.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            Jamie Bergen
  * Author URI:        https://jamiebergen.com/
  * License:           GPL-2.0+
@@ -34,14 +34,14 @@ if ( ! defined( 'WPINC' ) ) {
  * Current plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  */
-define( 'PLUGIN_NOTES_PLUS_VERSION', '1.1.0' );
+define( 'PLUGIN_NOTES_PLUS_VERSION', '1.1.1' );
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-plugin-name-activator.php
  */
 global $plugin_notes_plus_db_version;
-$plugin_notes_plus_db_version = '1.0';
+$plugin_notes_plus_db_version = '1.1';
 
 function activate_plugin_notes_plus() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-plugin-notes-plus-activator.php';
@@ -52,10 +52,10 @@ register_activation_hook( __FILE__, 'activate_plugin_notes_plus' );
 /**
  * The code that runs on plugin update.
  * Migrates data out of _options and into new custom table if upgrading from 1.0.0
+ * Removes old notes from options after migration is complete
  */
 function plugin_notes_plus_migrate_to_table() {
-
-	if ( !get_option( 'plugin_notes_plus_db_version' ) ) {
+	if ( !get_option( 'plugin_notes_plus_db_version' ) || get_option( 'plugin_notes_plus_db_version' ) == 1.0 ) {
 		activate_plugin_notes_plus();
 	}
 }

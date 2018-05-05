@@ -86,7 +86,26 @@ class Plugin_Notes_Plus_Activator {
 					self::migrate_old_notes( $plugin_unique_id_windows, $new_id );
 				}
 			}
-			add_option( 'plugin_notes_plus_db_version', $plugin_notes_plus_db_version );
+			add_option( 'plugin_notes_plus_db_version', 1.0 );
+		}
+
+		// Clean up old options entries after migration is complete
+		if ( get_option( 'plugin_notes_plus_db_version' ) == 1.0 ) {
+			$all_options = wp_load_alloptions();
+			$pnp_options  = array();
+
+			foreach ( $all_options as $name => $value ) {
+				if ( stristr( $name, 'plugin_notes_plus_' ) && $name !== 'plugin_notes_plus_db_version' ) {
+					$pnp_options[] = $name;
+				}
+			}
+
+			// Remove notes from options table
+			foreach ( $pnp_options as $pnp_option ) {
+				delete_option( $pnp_option );
+			}
+
+			update_option( 'plugin_notes_plus_db_version', $plugin_notes_plus_db_version );
 		}
 	}
 }
