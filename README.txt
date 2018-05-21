@@ -75,7 +75,7 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 == Changelog ==
 
-= 1.1.0 =
+= 1.1.1 =
 * Added: Cleanup routine to remove notes from the options table. (If upgrading from 1.0.0, notes will first be migrated into their own table.)
 
 = 1.1.0 =
