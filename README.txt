@@ -73,6 +73,10 @@ Plugin notes and note metadata are stored in a custom table whose name ends in `
 
 Each site within a multisite install maintains its own plugin notes. Additionally, the superadmin can maintain their own plugin notes.
 
+== Screenshots ==
+
+1. Upon activating the plugin, you will see a new column on the Plugins page that enables you to add, edit, or delete notes about the plugins you have installed on a particular site.
+
 == Changelog ==
 
 = 1.1.1 =
