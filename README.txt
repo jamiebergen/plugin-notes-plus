@@ -5,7 +5,7 @@ Donate link: https://jamiebergen.com/donate/
 Requires at least: 4.0
 Tested up to: 5.0
 Requires PHP: 5.5.24
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,10 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 == Changelog ==
 
+= 1.1.2 =
+* Fixed: Bug that prevented user from adding or updating notes after an ajax response. Thanks to @anticosti for helping to identify this bug.
+* Added: Spinning icon to indicate that a note is in the process of being deleted.
+
 = 1.1.1 =
 * Added: Cleanup routine to remove notes from the options table. (If upgrading from 1.0.0, notes will first be migrated into their own table.)
 
@@ -92,6 +96,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.1.2 =
+This version fixes a bug where plugin notes couldn't be updated if the user had previously filtered the list of plugins.
 
 = 1.1.1 =
 This version does some behind-the-scenes cleanup to the options table to improve performance. It should not affect your existing notes or the functionality of the plugin.
