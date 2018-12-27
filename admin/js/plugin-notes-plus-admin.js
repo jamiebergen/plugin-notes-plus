@@ -39,192 +39,192 @@ function registerPluginNote( pluginIdSanitized, noteDbId, noteContent, noteIcon,
         addListeners();
     });
 
-})(jQuery);
+    function addListeners() {
 
-function addListeners() {
+        "use strict";
 
-    "use strict";
+        // Preview dashicon corresponding to selected note type
+        $.each( $('.select-dashicon-for-note'), function() {
+            $(this).change(function(){
+                var icon = $(this).val();
+                $(this).prev().html('<span class="dashicons '+icon+'"></span>');
+            });
 
-    // Preview dashicon corresponding to selected note type
-    $.each( $('.select-dashicon-for-note'), function() {
-        $(this).change(function(){
-            var icon = $(this).val();
-            $(this).prev().html('<span class="dashicons '+icon+'"></span>');
+            $(this).change();
         });
 
-        $(this).change();
-    });
-
-    // Add target="_blank" to all links
-    $('.pnp-plugin-note a').each(function(){
-        $(this).attr( 'target', '_blank' );
-    });
+        // Add target="_blank" to all links
+        $('.pnp-plugin-note a').each(function(){
+            $(this).attr( 'target', '_blank' );
+        });
 
 
-    $('.pnp-add-note').on( 'click', function( event ) {
+        $('.pnp-add-note').on( 'click', function( event ) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        $(this).hide();
+            $(this).hide();
 
-        var newNoteForm = $(this).siblings('.pnp-note-form-wrapper');
+            var newNoteForm = $(this).siblings('.pnp-note-form-wrapper');
 
-        // Get class for first icon in list
-        var firstIcon = newNoteForm.find('.select-dashicon-for-note option:first-child').val();
+            // Get class for first icon in list
+            var firstIcon = newNoteForm.find('.select-dashicon-for-note option:first-child').val();
 
-        // Clear previous form content, reset icon, show form
-        newNoteForm.find('.pnp-note-form').val('');
-        newNoteForm.find('.select-dashicon-for-note').val(firstIcon);
-        newNoteForm.find('.view-icon').html('<span class="dashicons '+ firstIcon + '"></span>');
+            // Clear previous form content, reset icon, show form
+            newNoteForm.find('.pnp-note-form').val('');
+            newNoteForm.find('.select-dashicon-for-note').val(firstIcon);
+            newNoteForm.find('.view-icon').html('<span class="dashicons '+ firstIcon + '"></span>');
 
-        newNoteForm.show();
+            newNoteForm.show();
 
-    });
+        });
 
-    $('.pnp-save-note').on( 'click', function( event ) {
+        $('.pnp-save-note').on( 'click', function( event ) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        // Get plugin ID and basic info for new note
-        var pluginId = $(this).closest('.pnp-wrapper').attr('data-pluginfile');
-        var pluginIdSanitized = $(this).closest('.pnp-wrapper').attr('id');
-        var noteContent = $(this).siblings('.pnp-note-form').val();
-        var noteIcon = $(this).siblings().find('.select-dashicon-for-note').val();
+            // Get plugin ID and basic info for new note
+            var pluginId = $(this).closest('.pnp-wrapper').attr('data-pluginfile');
+            var pluginIdSanitized = $(this).closest('.pnp-wrapper').attr('id');
+            var noteContent = $(this).siblings('.pnp-note-form').val();
+            var noteIcon = $(this).siblings().find('.select-dashicon-for-note').val();
 
-        // Don't allow save with empty content
-        if ($.trim(noteContent) === "") {
-            alert(params.needs_content);
-            return false;
-        }
+            // Don't allow save with empty content
+            if ($.trim(noteContent) === "") {
+                alert(params.needs_content);
+                return false;
+            }
 
-        // Get existing note id if available (for case of edit)
-        var noteDbId = '';
-        var noteToEdit = $(this).closest('.pnp-note-form-wrapper').prev('.pnp-show-note-wrapper');
+            // Get existing note id if available (for case of edit)
+            var noteDbId = '';
+            var noteToEdit = $(this).closest('.pnp-note-form-wrapper').prev('.pnp-show-note-wrapper');
 
-        if (noteToEdit.length) {
+            if (noteToEdit.length) {
+                var noteCssId = noteToEdit.attr('id');
+                var start = noteCssId.lastIndexOf('_') + 1;
+                noteDbId = noteCssId.substr(start);
+            }
+
+            // Get handle on form for after the request
+            var noteForm = $(this).closest('.pnp-note-form-wrapper');
+
+            // Show spinner and disable textarea
+            var saveSpinner = $(this).next('.dashicons.pnp-spin');
+            saveSpinner.css('display', 'inline-block');
+            noteForm.find('textarea').prop('disabled', true);
+            noteForm.find('.pnp-cancel-note, .pnp-divider').hide();
+
+            // This does the ajax request
+            $.ajax({
+                url: params.ajaxurl,
+                data: {
+                    'action': 'pnp_add_response',
+                    'note' : noteContent,
+                    'icon' : noteIcon,
+                    'noteId' : noteDbId, // will be '' if not in db yet
+                    'pluginId' : pluginId,
+                    'security' : params.ajax_nonce
+                },
+                success:function( response ) {
+
+                    noteForm.hide();
+                    saveSpinner.hide();
+                    noteForm.find('textarea').prop('disabled', false);
+                    noteForm.find('.pnp-cancel-note, .pnp-divider').show();
+
+                    // Case where user creates new note
+                    var addNoteLink = noteForm.siblings('.pnp-add-note');
+                    if (addNoteLink.length){
+                        // Add new note to end of notes list
+                        $(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginIdSanitized, response.new_note_id )).insertBefore('#' + pluginIdSanitized + ' .pnp-add-note-wrapper');
+                        addNoteLink.show();
+                    }
+                    // Case where user edits existing note
+                    var existingNote = noteForm.prev('.pnp-show-note-wrapper');
+                    if (existingNote.length){
+                        existingNote.replaceWith(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginIdSanitized, response.new_note_id ));
+                    }
+
+                    // Attach delete and edit event handlers to new note
+                    // Note that this variable is defined above for the case of edit...
+                    var noteCssId = pluginIdSanitized + '_' + response.new_note_id;
+
+                    $('#' + noteCssId + ' .pnp-delete-note').click( function( event ) {
+
+                        event.preventDefault();
+                        deleteNote( noteCssId, response.new_note_id );
+                    });
+
+                    $('#' + noteCssId + ' .pnp-edit-note').click( function( event ) {
+
+                        event.preventDefault();
+                        var noteToEdit = $(this).closest('.pnp-show-note-wrapper');
+                        editNote( noteToEdit, pluginIdSanitized, response.new_note_id )
+                    });
+
+                    // Add target blank to a tags
+                    $('#' + pluginIdSanitized + ' .pnp-plugin-note a').attr( 'target', '_blank' );
+
+                    // Add new note to object
+                    registerPluginNote( pluginIdSanitized, response.new_note_id, response.processed_note, response.note_icon, response.note_time );
+
+                },
+                error: function( errorThrown ){
+                    console.log( errorThrown );
+                }
+            });
+        });
+
+        $('.pnp-edit-note').on( 'click', function( event ) {
+
+            event.preventDefault();
+
+            var noteToEdit = $(this).closest('.pnp-show-note-wrapper');
+
+            var pluginIdSanitized = $(this).closest('.pnp-wrapper').attr('id');
+
             var noteCssId = noteToEdit.attr('id');
             var start = noteCssId.lastIndexOf('_') + 1;
-            noteDbId = noteCssId.substr(start);
-        }
+            var noteDbId = noteCssId.substr(start);
 
-        // Get handle on form for after the request
-        var noteForm = $(this).closest('.pnp-note-form-wrapper');
+            editNote( noteToEdit, pluginIdSanitized, noteDbId );
 
-        // Show spinner and disable textarea
-        var saveSpinner = $(this).next('.dashicons.pnp-spin');
-        saveSpinner.css('display', 'inline-block');
-        noteForm.find('textarea').prop('disabled', true);
-        noteForm.find('.pnp-cancel-note, .pnp-divider').hide();
-
-        // This does the ajax request
-        $.ajax({
-            url: params.ajaxurl,
-            data: {
-                'action': 'pnp_add_response',
-                'note' : noteContent,
-                'icon' : noteIcon,
-                'noteId' : noteDbId, // will be '' if not in db yet
-                'pluginId' : pluginId,
-                'security' : params.ajax_nonce
-            },
-            success:function( response ) {
-
-                noteForm.hide();
-                saveSpinner.hide();
-                noteForm.find('textarea').prop('disabled', false);
-                noteForm.find('.pnp-cancel-note, .pnp-divider').show();
-
-                // Case where user creates new note
-                var addNoteLink = noteForm.siblings('.pnp-add-note');
-                if (addNoteLink.length){
-                    // Add new note to end of notes list
-                    $(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginIdSanitized, response.new_note_id )).insertBefore('#' + pluginIdSanitized + ' .pnp-add-note-wrapper');
-                    addNoteLink.show();
-                }
-                // Case where user edits existing note
-                var existingNote = noteForm.prev('.pnp-show-note-wrapper');
-                if (existingNote.length){
-                    existingNote.replaceWith(singleNoteMarkup( response.processed_note, response.note_icon, response.note_user, pluginIdSanitized, response.new_note_id ));
-                }
-
-                // Attach delete and edit event handlers to new note
-                // Note that this variable is defined above for the case of edit...
-                var noteCssId = pluginIdSanitized + '_' + response.new_note_id;
-
-                $('#' + noteCssId + ' .pnp-delete-note').click( function( event ) {
-
-                    event.preventDefault();
-                    deleteNote( noteCssId, response.new_note_id );
-                });
-
-                $('#' + noteCssId + ' .pnp-edit-note').click( function( event ) {
-
-                    event.preventDefault();
-                    var noteToEdit = $(this).closest('.pnp-show-note-wrapper');
-                    editNote( noteToEdit, pluginIdSanitized, response.new_note_id )
-                });
-
-                // Add target blank to a tags
-                $('#' + pluginIdSanitized + ' .pnp-plugin-note a').attr( 'target', '_blank' );
-
-                // Add new note to object
-                registerPluginNote( pluginIdSanitized, response.new_note_id, response.processed_note, response.note_icon, response.note_time );
-
-            },
-            error: function( errorThrown ){
-                console.log( errorThrown );
-            }
         });
-    });
 
-    $('.pnp-edit-note').on( 'click', function( event ) {
+        $('.pnp-cancel-note').on( 'click', function( event ) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        var noteToEdit = $(this).closest('.pnp-show-note-wrapper');
+            $(this).closest('.pnp-note-form-wrapper').hide();
 
-        var pluginIdSanitized = $(this).closest('.pnp-wrapper').attr('id');
+            // Case where user cancels new note
+            var addNoteLink = $(this).closest('.pnp-note-form-wrapper').siblings('.pnp-add-note');
+            if (addNoteLink.length){
+                addNoteLink.show();
+            }
 
-        var noteCssId = noteToEdit.attr('id');
-        var start = noteCssId.lastIndexOf('_') + 1;
-        var noteDbId = noteCssId.substr(start);
+            // Case where user cancels existing note
+            var existingNote = $(this).closest('.pnp-note-form-wrapper').prev('.pnp-show-note-wrapper');
+            if (existingNote.length){
+                existingNote.show();
+            }
 
-        editNote( noteToEdit, pluginIdSanitized, noteDbId );
+        });
 
-    });
+        $('.pnp-delete-note').on( 'click', function( event ) {
 
-    $('.pnp-cancel-note').on( 'click', function( event ) {
+            event.preventDefault();
 
-        event.preventDefault();
+            var noteCssId = $(this).closest('.pnp-show-note-wrapper').attr('id');
+            var start = noteCssId.lastIndexOf('_') + 1;
+            var noteDbId = noteCssId.substr(start);
 
-        $(this).closest('.pnp-note-form-wrapper').hide();
+            deleteNote( noteCssId, noteDbId );
 
-        // Case where user cancels new note
-        var addNoteLink = $(this).closest('.pnp-note-form-wrapper').siblings('.pnp-add-note');
-        if (addNoteLink.length){
-            addNoteLink.show();
-        }
+        });
+    }
 
-        // Case where user cancels existing note
-        var existingNote = $(this).closest('.pnp-note-form-wrapper').prev('.pnp-show-note-wrapper');
-        if (existingNote.length){
-            existingNote.show();
-        }
-
-    });
-
-    $('.pnp-delete-note').on( 'click', function( event ) {
-
-        event.preventDefault();
-
-        var noteCssId = $(this).closest('.pnp-show-note-wrapper').attr('id');
-        var start = noteCssId.lastIndexOf('_') + 1;
-        var noteDbId = noteCssId.substr(start);
-
-        deleteNote( noteCssId, noteDbId );
-
-    });
-}
+})(jQuery);
 
 function editNote( noteToEdit, pluginIdSanitized, noteDbId ) {
 
