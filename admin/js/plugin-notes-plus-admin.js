@@ -1,3 +1,7 @@
+/**
+ * This file is enqueued from admin/class-plugin-notes-plus-admin.php.
+ */
+
 // Store all notes in a global variable for easy access
 var pluginNotes = {};
 function registerPluginNote( pluginIdSanitized, noteDbId, noteContent, noteIcon, noteTime ) {
@@ -18,54 +22,28 @@ function registerPluginNote( pluginIdSanitized, noteDbId, noteContent, noteIcon,
     };
 }
 
-jQuery( document ).ready( function( $ ) {
+(function($){
+    $(document).ready( function() {
+        addListeners();
+    });
+
+    $( document ).ajaxComplete(function() {
+
+        // Remove any existing listeners first
+        $('.pnp-add-note').off( 'click' );
+        $('.pnp-save-note').off( 'click' );
+        $('.pnp-edit-note').off( 'click' );
+        $('.pnp-cancel-note').off( 'click' );
+        $('.pnp-delete-note').off( 'click' );
+
+        addListeners();
+    });
+
+})(jQuery);
+
+function addListeners() {
 
     "use strict";
-    /**
-     * The file is enqueued from admin/class-plugin-notes-plus-admin.php.
-     */
-
-    function deleteNote( noteCssId, noteDbId ) {
-
-        if (confirm(params.confirm_delete)) {
-            // This does the ajax request
-            $.ajax({
-                url: params.ajaxurl,
-                data: {
-                    'action': 'pnp_delete_response',
-                    'noteId' : noteDbId,
-                    'security' : params.ajax_nonce
-                },
-                success:function( data ) {
-                    // This outputs the result of the ajax request
-                    $('#' + noteCssId + '.pnp-show-note-wrapper').remove();
-
-                },
-                error: function( errorThrown ){
-                    console.log( errorThrown );
-                }
-            });
-        }
-        return false;
-    }
-
-    function editNote( noteToEdit, pluginIdSanitized, noteDbId ) {
-
-        noteToEdit.hide();
-
-        // Show form with existing content
-        noteToEdit.closest('.pnp-wrapper').find('.pnp-note-form-wrapper').last().clone(true).insertAfter(noteToEdit).show();
-
-        var editNoteForm = noteToEdit.next('.pnp-note-form-wrapper');
-
-        var noteContent = pluginNotes[pluginIdSanitized + "_" + noteDbId].note;
-        var noteIcon = pluginNotes[pluginIdSanitized + "_" + noteDbId].icon;
-
-        editNoteForm.find('.pnp-note-form').val(noteContent);
-        editNoteForm.find('.select-dashicon-for-note').val(noteIcon);
-        editNoteForm.find('.view-icon').html('<span class="dashicons ' + noteIcon + '"></span>');
-
-    }
 
     // Preview dashicon corresponding to selected note type
     $.each( $('.select-dashicon-for-note'), function() {
@@ -83,7 +61,7 @@ jQuery( document ).ready( function( $ ) {
     });
 
 
-    $('.pnp-add-note').click( function( event ) {
+    $('.pnp-add-note').on( 'click', function( event ) {
 
         event.preventDefault();
 
@@ -103,7 +81,7 @@ jQuery( document ).ready( function( $ ) {
 
     });
 
-    $('.pnp-save-note').click( function( event ) {
+    $('.pnp-save-note').on( 'click', function( event ) {
 
         event.preventDefault();
 
@@ -147,7 +125,7 @@ jQuery( document ).ready( function( $ ) {
                 'icon' : noteIcon,
                 'noteId' : noteDbId, // will be '' if not in db yet
                 'pluginId' : pluginId,
-				'security' : params.ajax_nonce
+                'security' : params.ajax_nonce
             },
             success:function( response ) {
 
@@ -199,25 +177,7 @@ jQuery( document ).ready( function( $ ) {
         });
     });
 
-    function singleNoteMarkup( note, icon, user, pluginIdSanitized, noteDbId ) {
-
-        note = note.replace(/\n/g, "<br />"); // maintain line breaks
-
-        var markup = '';
-        markup += '<div class="pnp-show-note-wrapper" id="' + pluginIdSanitized + '_' + noteDbId + '">';
-        markup += '<div class="pnp-plugin-note">';
-        markup += '<span class="dashicons ' + icon + '"></span>';
-        markup += note;
-        markup += '<p class="pnp-note-meta">' + user + ' | <span class="pnp-note-time"></span></p>';
-        markup += '</div>';
-        markup += '<a href="#" class="pnp-edit-note">' + params.edit_text + '</a> | ';
-        markup += '<a href="#" class="pnp-delete-note">' + params.delete_text + '</a>';
-        markup += '</div>';
-
-        return markup;
-    }
-
-    $('.pnp-edit-note').click( function( event ) {
+    $('.pnp-edit-note').on( 'click', function( event ) {
 
         event.preventDefault();
 
@@ -233,7 +193,7 @@ jQuery( document ).ready( function( $ ) {
 
     });
 
-    $('.pnp-cancel-note').click( function( event ) {
+    $('.pnp-cancel-note').on( 'click', function( event ) {
 
         event.preventDefault();
 
@@ -253,7 +213,7 @@ jQuery( document ).ready( function( $ ) {
 
     });
 
-    $('.pnp-delete-note').click( function( event ) {
+    $('.pnp-delete-note').on( 'click', function( event ) {
 
         event.preventDefault();
 
@@ -264,5 +224,71 @@ jQuery( document ).ready( function( $ ) {
         deleteNote( noteCssId, noteDbId );
 
     });
+}
 
-});
+function editNote( noteToEdit, pluginIdSanitized, noteDbId ) {
+
+    noteToEdit.hide();
+
+    // Show form with existing content
+    noteToEdit.closest('.pnp-wrapper').find('.pnp-note-form-wrapper').last().clone(true).insertAfter(noteToEdit).show();
+
+    var editNoteForm = noteToEdit.next('.pnp-note-form-wrapper');
+
+    var noteContent = pluginNotes[pluginIdSanitized + "_" + noteDbId].note;
+    var noteIcon = pluginNotes[pluginIdSanitized + "_" + noteDbId].icon;
+
+    editNoteForm.find('.pnp-note-form').val(noteContent);
+    editNoteForm.find('.select-dashicon-for-note').val(noteIcon);
+    editNoteForm.find('.view-icon').html('<span class="dashicons ' + noteIcon + '"></span>');
+
+}
+
+function deleteNote( noteCssId, noteDbId ) {
+
+    if (confirm(params.confirm_delete)) {
+
+        // Show spinner
+        var deleteLink = jQuery('#' + noteCssId + ' .pnp-delete-note');
+        var deleteSpinner = deleteLink.next('.dashicons.pnp-spin');
+        deleteSpinner.css('display', 'inline-block');
+
+        // This does the ajax request
+        jQuery.ajax({
+            url: params.ajaxurl,
+            data: {
+                'action': 'pnp_delete_response',
+                'noteId' : noteDbId,
+                'security' : params.ajax_nonce
+            },
+            success:function( data ) {
+                // This outputs the result of the ajax request
+                jQuery('#' + noteCssId + '.pnp-show-note-wrapper').remove();
+
+            },
+            error: function( errorThrown ){
+                console.log( errorThrown );
+            }
+        });
+    }
+    return false;
+}
+
+function singleNoteMarkup( note, icon, user, pluginIdSanitized, noteDbId ) {
+
+    note = note.replace(/\n/g, "<br />"); // maintain line breaks
+
+    var markup = '';
+    markup += '<div class="pnp-show-note-wrapper" id="' + pluginIdSanitized + '_' + noteDbId + '">';
+    markup += '<div class="pnp-plugin-note">';
+    markup += '<span class="dashicons ' + icon + '"></span>';
+    markup += note;
+    markup += '<p class="pnp-note-meta">' + user + ' | <span class="pnp-note-time"></span></p>';
+    markup += '</div>';
+    markup += '<a href="#" class="pnp-edit-note">' + params.edit_text + '</a> | ';
+    markup += '<a href="#" class="pnp-delete-note">' + params.delete_text + '</a>';
+    markup += '<span class="pnp-spin dashicons dashicons-update"></span>';
+    markup += '</div>';
+
+    return markup;
+}
