@@ -82,6 +82,7 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 = 1.2.0 =
 * Added: Plugin notes now display in a read-only format on the WordPress Updates page (update-core.php). Thanks to @douglsmith for the suggestion.
+* Fixed: Removed unnecessary multisite hook.
 
 = 1.1.2 =
 * Fixed: Bug that prevented user from adding or updating notes after an ajax response. Thanks to @anticosti for helping to identify this bug.
