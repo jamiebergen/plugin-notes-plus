@@ -3,9 +3,9 @@ Contributors: jamiebergen
 Tags: plugins, plugin notes, memo
 Donate link: https://jamiebergen.com/donate/
 Requires at least: 4.0
-Tested up to: 5.0
+Tested up to: 5.2.2
 Requires PHP: 5.5.24
-Stable tag: 1.1.2
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ Features
 * Format notes using basic HTML tags if desired.
 * Any links included in the note will be automatically converted to `target="_blank"`
 * Notes are added and updated via Ajax, avoiding slow page reloads.
+* Notes also display on the WordPress Updates page for any plugins that need to be updated.
 
 == Installation ==
 1. You can either install the plugin via the Plugins directory from within your WordPress install, or you can upload the files manually to your server by extracting the .zip file and placing its contents in the /wp-content/plugins/ directory.
@@ -79,6 +80,10 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 == Changelog ==
 
+= 1.2.0 =
+* Added: Plugin notes now display in a read-only format on the WordPress Updates page (update-core.php). Thanks to @douglsmith for the suggestion.
+* Fixed: Removed unnecessary multisite hook. Thanks to @foomagoo for pointing this out.
+
 = 1.1.2 =
 * Fixed: Bug that prevented user from adding or updating notes after an ajax response. Thanks to @anticosti for helping to identify this bug.
 * Added: Spinning icon to indicate that a note is in the process of being deleted.
@@ -96,6 +101,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+This version adds a feature to display plugin notes on the WordPress Updates page.
 
 = 1.1.2 =
 This version fixes a bug where plugin notes couldn't be updated if the user had previously filtered the list of plugins.

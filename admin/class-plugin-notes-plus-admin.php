@@ -98,6 +98,25 @@ class Plugin_Notes_Plus_Admin {
 		wp_enqueue_script( 'pnp_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-admin.js', array( 'jquery' ), $this->plugin->get_version(), false );
 		wp_localize_script( 'pnp_ajax_handle', 'params', $params );
 
+		/**
+		 * Retrieve notes for plugins on updates page and send to JavaScript file
+		 *
+		 * @since    1.2.0
+		 */
+
+		// Only run this code on update-core.php admin page
+		global $hook_suffix;
+
+		if ( $hook_suffix == 'update-core.php' ) {
+			$updates = $this->get_notes_for_plugin_updates_page();
+			$labels = array (
+				'col_title' => esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() ),
+				'no_note' => esc_html__( 'No Plugin Notes', $this->plugin->get_plugin_name() ),
+			);
+			wp_enqueue_script( 'pnp_updates_script', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-updates.js', array( 'jquery' ), $this->plugin->get_version(), false );
+			wp_localize_script( 'pnp_updates_script', 'updates', $updates );
+			wp_localize_script( 'pnp_updates_script', 'labels', $labels );
+		}
 	}
 
 	/**
@@ -225,6 +244,33 @@ class Plugin_Notes_Plus_Admin {
 		die();
 	}
 
+	/**
+	 * Function that retrieves plugin notes for plugins that need updating
+	 *
+	 * @since    1.2.0
+	 */
+	public function get_notes_for_plugin_updates_page() {
+
+		$notes_array = array();
+
+		require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+		$plugins = get_plugin_updates();
+
+		if ( empty( $plugins ) ) {
+			return $notes_array;
+		}
+
+		foreach ( $plugins as $plugin_file => $plugin_data ) {
+
+			$plugin_unique_id = $this->get_plugin_unique_id( $plugin_file );
+			$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $plugin_unique_id );
+			$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
+
+			array_push( $notes_array, $the_plugin_notes );
+		}
+
+		return $notes_array;
+	}
 }
 
 Plugin_Notes_Plus_Admin::$icon_options = array(

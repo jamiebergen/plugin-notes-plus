@@ -150,10 +150,10 @@ class Plugin_Notes_Plus {
 		$this->loader->add_filter( 'manage_plugins_columns', $plugin_admin, 'add_plugin_notes_column' );
 		$this->loader->add_action( 'manage_plugins_custom_column', $plugin_admin, 'display_plugin_note',10, 3 );
 
-		// Separate hooks for multisite admin plugins page
+		// Separate hook for multisite admin plugins page
 		$this->loader->add_filter( 'manage_plugins-network_columns', $plugin_admin, 'add_plugin_notes_column' );
-		$this->loader->add_action( 'manage_plugins-network_custom_column', $plugin_admin, 'display_plugin_note',10, 3 );
 
+		// Ajax responses for adding and deleting notes
 		$this->loader->add_action( 'wp_ajax_pnp_add_response', $plugin_admin, 'pnp_add_response');
 		$this->loader->add_action( 'wp_ajax_pnp_delete_response', $plugin_admin, 'pnp_delete_response');
 	}
