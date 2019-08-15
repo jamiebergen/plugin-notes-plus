@@ -109,12 +109,13 @@ class Plugin_Notes_Plus_Admin {
 
 		if ( $hook_suffix == 'update-core.php' ) {
 			$updates = $this->get_notes_for_plugin_updates_page();
+			$updates_json_str = json_encode( $updates );
 			$labels = array (
 				'col_title' => esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() ),
 				'no_note' => esc_html__( 'No Plugin Notes', $this->plugin->get_plugin_name() ),
 			);
 			wp_enqueue_script( 'pnp_updates_script', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-updates.js', array( 'jquery' ), $this->plugin->get_version(), false );
-			wp_localize_script( 'pnp_updates_script', 'updates', $updates );
+			wp_localize_script( 'pnp_updates_script', 'updates', $updates_json_str );
 			wp_localize_script( 'pnp_updates_script', 'labels', $labels );
 		}
 	}
