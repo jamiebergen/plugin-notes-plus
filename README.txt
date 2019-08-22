@@ -82,6 +82,7 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 = 1.2.1 =
 * Fixed: JavaScript error that sometimes happened on update-core.php if a plugin had no notes. Thanks to @brianhenryie for bringing this to my attention.
+* Added: Hungarian translation. Thanks to @tomek00.
 
 = 1.2.0 =
 * Added: Plugin notes now display in a read-only format on the WordPress Updates page (update-core.php). Thanks to @douglsmith for the suggestion.
@@ -106,7 +107,7 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 == Upgrade Notice ==
 
 = 1.2.1 =
-This version fixes a rare JavaScript error on the WordPress Updates page.
+This version fixes a rare JavaScript error on the WordPress Updates page and adds a Hungarian translation.
 
 = 1.2.0 =
 This version adds a feature to display plugin notes on the WordPress Updates page.
