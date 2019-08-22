@@ -34,7 +34,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Current plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  */
-define( 'PLUGIN_NOTES_PLUS_VERSION', '1.2.0' );
+define( 'PLUGIN_NOTES_PLUS_VERSION', '1.2.1' );
 
 /**
  * The code that runs during plugin activation.
