@@ -8,17 +8,21 @@
 
         $('#update-plugins-table thead tr, #update-plugins-table tfoot tr').append( '<td id="pnp_plugin_notes_col">'+ labels.col_title +'</td>' );
 
+        var notes_for_plugin_updates = $.parseJSON(updates);
+
         var i = 0;
 
         $('#update-plugins-table .plugins tr').each(function() {
 
-            const values = Object.values(updates[i]);
+            var plugin_notes = notes_for_plugin_updates[i];
 
-            if (values === undefined || values.length === 0) {
+            if (plugin_notes === undefined || plugin_notes.length === 0) {
 
                 $(this).append( '<td>'+ labels.no_note +'</td>' );
 
             } else {
+
+                var values = Object.values(plugin_notes);
 
                 var noteMarkup = '<div class="pnp-wrapper">';
 

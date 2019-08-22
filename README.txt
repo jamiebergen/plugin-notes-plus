@@ -5,7 +5,7 @@ Donate link: https://jamiebergen.com/donate/
 Requires at least: 4.0
 Tested up to: 5.2.2
 Requires PHP: 5.5.24
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,10 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 == Changelog ==
 
+= 1.2.1 =
+* Fixed: JavaScript error that sometimes happened on update-core.php if a plugin had no notes. Thanks to @brianhenryie for bringing this to my attention.
+* Added: Hungarian translation. Thanks to @tomek00.
+
 = 1.2.0 =
 * Added: Plugin notes now display in a read-only format on the WordPress Updates page (update-core.php). Thanks to @douglsmith for the suggestion.
 * Fixed: Removed unnecessary multisite hook. Thanks to @foomagoo for pointing this out.
@@ -101,6 +105,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.1 =
+This version fixes a rare JavaScript error on the WordPress Updates page and adds a Hungarian translation.
 
 = 1.2.0 =
 This version adds a feature to display plugin notes on the WordPress Updates page.
