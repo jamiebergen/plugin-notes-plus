@@ -90,8 +90,8 @@ class Plugin_Notes_Plus_Admin {
 		$params = array (
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'ajax_nonce' => wp_create_nonce( 'pnp_add_plugin_note_form_nonce' ), // this is a unique token to prevent form hijacking
-			'edit_text' => esc_html__( 'edit', $this->plugin->get_plugin_name() ),
-			'delete_text' => esc_html__( 'delete', $this->plugin->get_plugin_name() ),
+			'edit_text' => esc_html__( 'Edit', $this->plugin->get_plugin_name() ),
+			'delete_text' => esc_html__( 'Delete', $this->plugin->get_plugin_name() ),
 			'confirm_delete' => esc_html__( 'Are you sure you want to delete this note?', $this->plugin->get_plugin_name() ),
 			'needs_content' => esc_html__( 'The note must contain content.', $this->plugin->get_plugin_name() ),
 		);
