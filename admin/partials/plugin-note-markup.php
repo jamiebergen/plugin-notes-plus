@@ -21,8 +21,9 @@ if ( current_user_can('activate_plugins') ) {
             foreach ( $the_plugin_notes as $note_index => $the_plugin_note ) { ?>
                 <div class="pnp-show-note-wrapper" id="<?php echo $plugin_unique_id_sanitized . '_' . $note_index; ?>">
                     <div class="pnp-plugin-note">
-                        <span class="dashicons <?php echo $the_plugin_note['icon'] ?>"></span><?php echo nl2br( $the_plugin_note[ 'note' ] ); ?>
-                        <p class="pnp-note-meta"><?php echo $the_plugin_note['user'] ?> | <span class="pnp-note-time"></span></p>
+                        <span class="dashicons <?php echo $the_plugin_note['icon'] ?>" title="<?php esc_attr_e( $the_plugin_note['user'] ); ?>"></span>
+                        <span class="pnp-note-time"></span>:
+                        <?php echo nl2br( $the_plugin_note[ 'note' ] ); ?>
                     </div>
                     <a href="#" class="pnp-edit-note"><?php esc_html_e( 'edit', $this->plugin->get_plugin_name() ) ?></a> |
                     <a href="#" class="pnp-delete-note"><?php esc_html_e( 'delete', $this->plugin->get_plugin_name() ) ?></a>
