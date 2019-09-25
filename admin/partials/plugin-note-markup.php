@@ -24,8 +24,8 @@ if ( current_user_can('activate_plugins') ) {
                         <span class="dashicons <?php echo $the_plugin_note['icon'] ?>"></span><?php echo nl2br( $the_plugin_note[ 'note' ] ); ?>
                         <p class="pnp-note-meta"><?php echo $the_plugin_note['user'] ?> | <span class="pnp-note-time"></span></p>
                     </div>
-                    <a href="#" class="pnp-edit-note"><?php esc_html_e( 'edit', $this->plugin->get_plugin_name() ) ?></a> |
-                    <a href="#" class="pnp-delete-note"><?php esc_html_e( 'delete', $this->plugin->get_plugin_name() ) ?></a>
+                    <a href="#" class="pnp-edit-note"><?php esc_html_e( 'Edit', $this->plugin->get_plugin_name() ) ?></a> |
+                    <a href="#" class="pnp-delete-note"><?php esc_html_e( 'Delete', $this->plugin->get_plugin_name() ) ?></a>
                     <span class="pnp-spin dashicons dashicons-update"></span>
                 </div>
                 <script>
