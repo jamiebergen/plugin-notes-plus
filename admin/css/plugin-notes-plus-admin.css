@@ -5,7 +5,6 @@
 
 #pnp_plugin_notes_col {
     width: 20%;
-    text-align: left;
 }
 .pnp-note-form-wrapper {
     display: none;
@@ -31,6 +30,10 @@
     padding-right: 5px;
     font-size: 20px;
 }
+.rtl .pnp-plugin-note span.dashicons {
+    padding-right: 0;
+    padding-left: 5px;
+}
 .pnp-note-meta {
     font-size: 11px !important;
     margin-top: 5px !important;
@@ -53,6 +56,10 @@
     font-family: dashicons;
     padding-left: 3px;
     vertical-align: top;
+}
+.rtl .pnp-plugin-note a[target="_blank"]:after {
+    padding-left: 0;
+    padding-right: 3px;
 }
 
 /* Spinner displayed while saving */
