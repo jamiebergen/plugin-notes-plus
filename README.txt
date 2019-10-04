@@ -3,9 +3,9 @@ Contributors: jamiebergen
 Tags: plugins, plugin notes, memo
 Donate link: https://jamiebergen.com/donate/
 Requires at least: 4.0
-Tested up to: 5.2.2
+Tested up to: 5.2.3
 Requires PHP: 5.5.24
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,10 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 == Changelog ==
 
+= 1.2.2 =
+* Added: Updates for RTL compatibility. Thanks to @ramiy.
+* Removed: Unnecessary po and mo translation files.
+
 = 1.2.1 =
 * Fixed: JavaScript error that sometimes happened on update-core.php if a plugin had no notes. Thanks to @brianhenryie for bringing this to my attention.
 * Added: Hungarian translation. Thanks to @tomek00.
@@ -105,6 +109,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.2 =
+This version makes updates for RTL compatibility and removes unnecessary po and mo translation files.
 
 = 1.2.1 =
 This version fixes a rare JavaScript error on the WordPress Updates page and adds a Hungarian translation.
