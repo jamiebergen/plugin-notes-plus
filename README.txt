@@ -3,7 +3,7 @@ Contributors: jamiebergen
 Tags: plugins, plugin notes, memo
 Donate link: https://jamiebergen.com/donate/
 Requires at least: 4.0
-Tested up to: 5.3
+Tested up to: 5.3.2
 Requires PHP: 5.6
 Stable tag: 1.2.2
 License: GPLv2 or later
