@@ -1,7 +1,6 @@
 === Plugin Notes Plus ===
 Contributors: jamiebergen
 Tags: plugins, plugin notes, memo
-Donate link: https://jamiebergen.com/donate/
 Requires at least: 4.0
 Tested up to: 5.6
 Requires PHP: 5.6
