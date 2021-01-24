@@ -5,14 +5,14 @@ Donate link: https://jamiebergen.com/donate/
 Requires at least: 4.0
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Adds a column to the Plugins page where you can add, edit, or delete notes about a plugin.
 
 == Description ==
-Have you ever returned to a site that you built a while back and asked, "Dude, why did I install this plugin?" This plugin provides an extra column on the Plugins page that enables you to add, edit, or delete notes about the plugins you have installed on a particular site. These notes are intended to provide documentation regarding why a particular plugin was installed and how or where it's being used.
+Have you ever returned to a site that you built a while back and asked, "Why did I install this plugin?" This plugin provides an extra column on the Plugins page that enables you to add, edit, or delete notes about the plugins you have installed on a particular site. These notes are intended to provide documentation regarding why a particular plugin was installed and how or where it's being used.
 
 Features
 
@@ -80,6 +80,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 == Changelog ==
 
+= 1.2.3 =
+* Added: Money icon option. Thanks to @ramiy.
+
 = 1.2.2 =
 * Added: Updates for RTL compatibility. Thanks to @ramiy.
 * Removed: Unnecessary po and mo translation files.
@@ -109,6 +112,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.3 =
+This version adds an option for a money icon.
 
 = 1.2.2 =
 This version makes updates for RTL compatibility and removes unnecessary po and mo translation files.
