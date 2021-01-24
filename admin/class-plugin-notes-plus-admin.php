@@ -281,4 +281,5 @@ Plugin_Notes_Plus_Admin::$icon_options = array(
 	'dashicons-warning' => esc_html__( 'Warning', Plugin_Notes_Plus::get_plugin_name() ),
 	'dashicons-admin-network' => esc_html__( 'Key', Plugin_Notes_Plus::get_plugin_name() ),
 	'dashicons-yes' => esc_html__( 'Checkmark', Plugin_Notes_Plus::get_plugin_name() ),
+	'dashicons-money' => esc_html__( 'Money', Plugin_Notes_Plus::get_plugin_name() ),
 );
