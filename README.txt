@@ -81,7 +81,7 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 == Changelog ==
 
 = 1.2.3 =
-* Added: Money icon option. Thanks to @ramiy.
+* Added: Money icon option. Thanks to @brianhenryie.
 
 = 1.2.2 =
 * Added: Updates for RTL compatibility. Thanks to @ramiy.
