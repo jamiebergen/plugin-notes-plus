@@ -22,6 +22,7 @@ Features
 * Any links included in the note will be automatically converted to `target="_blank"`
 * Notes are added and updated via Ajax, avoiding slow page reloads.
 * Notes also display on the WordPress Updates page for any plugins that need to be updated.
+* A filter is provided if you would like to display notes beneath the plugin description instead of in a separate column.
 
 == Installation ==
 1. You can either install the plugin via the Plugins directory from within your WordPress install, or you can upload the files manually to your server by extracting the .zip file and placing its contents in the /wp-content/plugins/ directory.
@@ -31,7 +32,7 @@ Features
 == Frequently Asked Questions ==
 = Can I display the plugin notes beneath the plugin description instead of in a separate column? =
 
-Yes, you can use the filter plugin-notes-plus_note_placement to move notes beneath the plugin description.
+As of version 1.2.4, you can use the filter plugin-notes-plus_note_placement to move notes beneath the plugin description.
 
 Here is an example of a snippet that places plugin notes beneath the plugin description. It can be added to your child theme's functions.php. Without this, the note position will default to a separate column on the plugins page.
 
