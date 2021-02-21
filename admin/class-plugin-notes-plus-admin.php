@@ -165,6 +165,28 @@ class Plugin_Notes_Plus_Admin {
 	}
 
 	/**
+	 * Display the plugin note(s) for a given plugin beneath the plugin description
+	 *
+	 * @since    1.2.3
+	 */
+	public function display_plugin_note_desc( $plugin_meta, $plugin_file, $plugin_data, $context ) {
+
+		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_file );
+		$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $plugin_unique_id );
+
+		$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
+		ksort($the_plugin_notes);
+
+		$icon_options_array = apply_filters( 'plugin-notes-plus_icon_options', self::$icon_options );
+		$plugin_unique_id_sanitized = preg_replace( '/[^a-zA-Z0-9_-]/', '-', 'pnp_' . $plugin_unique_id );
+
+		include( 'partials/plugin-note-markup.php' );
+
+		return $plugin_meta;
+
+	}
+
+	/**
 	 * Ajax handler for adding a plugin note.
 	 *
 	 * @since    1.0.0

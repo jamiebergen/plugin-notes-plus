@@ -146,18 +146,43 @@ class Plugin_Notes_Plus {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
-		// Custom column on plugins page in admin
-		$this->loader->add_filter( 'manage_plugins_columns', $plugin_admin, 'add_plugin_notes_column' );
-		$this->loader->add_action( 'manage_plugins_custom_column', $plugin_admin, 'display_plugin_note',10, 3 );
+		// Decision point for where to place notes
+		$this->loader->add_action( 'after_setup_theme', $this, 'get_note_placement_option' );
 
-		// Separate hook for multisite admin plugins page
-		$this->loader->add_filter( 'manage_plugins-network_columns', $plugin_admin, 'add_plugin_notes_column' );
+		$pnp_note_placement = get_option( 'plugin_notes_plus_note_placement' );
+
+		if ( 'description' === $pnp_note_placement ) {
+			// Option to display plugin notes beneath description
+			$this->loader->add_filter( 'plugin_row_meta', $plugin_admin, 'display_plugin_note_desc', 10, 4 );
+		} else { // 'column' by default
+			// Custom column on plugins page in admin
+			$this->loader->add_filter( 'manage_plugins_columns', $plugin_admin, 'add_plugin_notes_column' );
+			$this->loader->add_action( 'manage_plugins_custom_column', $plugin_admin, 'display_plugin_note', 10, 3 );
+
+			// Separate hook for multisite admin plugins page (only required for column option)
+			$this->loader->add_filter( 'manage_plugins-network_columns', $plugin_admin, 'add_plugin_notes_column' );
+		}
 
 		// Ajax responses for adding and deleting notes
 		$this->loader->add_action( 'wp_ajax_pnp_add_response', $plugin_admin, 'pnp_add_response');
 		$this->loader->add_action( 'wp_ajax_pnp_delete_response', $plugin_admin, 'pnp_delete_response');
 	}
 
+	public function get_note_placement_option() {
+
+		$pnp_note_placement_options = array( 'column', 'description' );
+
+		$pnp_note_placement = 'column'; // set default
+
+		$pnp_note_placement = apply_filters( 'plugin-notes-plus_note_placement', $pnp_note_placement );
+
+		// Protect against unexpected options 
+		if ( ! in_array( $pnp_note_placement, $pnp_note_placement_options ) ) {
+			$pnp_note_placement = 'column';
+		}
+
+		update_option( 'plugin_notes_plus_note_placement', $pnp_note_placement );
+	}
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.

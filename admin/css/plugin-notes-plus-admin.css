@@ -39,6 +39,10 @@
     margin-top: 5px !important;
 }
 
+.column-description .pnp-wrapper {
+    padding-bottom: 10px;
+}
+
 /* Icon colors */
 .pnp-wrapper .dashicons-info {
     color: deepskyblue;
