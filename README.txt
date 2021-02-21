@@ -2,9 +2,9 @@
 Contributors: jamiebergen
 Tags: plugins, plugin notes, memo
 Requires at least: 4.0
-Tested up to: 5.6
+Tested up to: 5.6.1
 Requires PHP: 5.6
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,21 @@ Features
 3. Add, edit, or delete notes in the Plugin Notes column on the Installed Plugins page.
 
 == Frequently Asked Questions ==
+= Can I display the plugin notes beneath the plugin description instead of in a separate column? =
+
+Yes, you can use the filter plugin-notes-plus_note_placement to move notes beneath the plugin description.
+
+Here is an example of a snippet that places plugin notes beneath the plugin description. It can be added to your child theme's functions.php. Without this, the note position will default to a separate column on the plugins page.
+
+`function pnp_change_note_placement( $note_placement ) {
+
+	$note_placement = 'description';
+
+	return $note_placement;
+
+}
+add_filter( 'plugin-notes-plus_note_placement', 'pnp_change_note_placement' );`
+
 = Can I modify which icons are available to display next to plugin notes? =
 
 Yes, you can use the filter plugin-notes-plus_icon_options to modify the set of icons available. The icons must be selected from [the list of available WordPress dashicons](https://developer.wordpress.org/resource/dashicons/).
@@ -79,6 +94,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 == Changelog ==
 
+= 1.2.4 =
+* Added: Option to display notes beneath plugin description. Thanks to @antipole for the suggestion.
+
 = 1.2.3 =
 * Added: Money icon option. Thanks to @brianhenryie.
 
@@ -111,6 +129,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.4 =
+This version adds a filter so that the user can move notes beneath the plugin description if desired.
 
 = 1.2.3 =
 This version adds an option for a money icon.

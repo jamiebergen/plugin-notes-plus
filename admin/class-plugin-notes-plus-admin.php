@@ -167,7 +167,7 @@ class Plugin_Notes_Plus_Admin {
 	/**
 	 * Display the plugin note(s) for a given plugin beneath the plugin description
 	 *
-	 * @since    1.2.3
+	 * @since    1.2.4
 	 */
 	public function display_plugin_note_desc( $plugin_meta, $plugin_file, $plugin_data, $context ) {
 

@@ -168,6 +168,11 @@ class Plugin_Notes_Plus {
 		$this->loader->add_action( 'wp_ajax_pnp_delete_response', $plugin_admin, 'pnp_delete_response');
 	}
 
+	/**
+	 * Helper function to get and set the note placement option in the database
+	 *
+	 * @since    1.2.4
+	 */
 	public function get_note_placement_option() {
 
 		$pnp_note_placement_options = array( 'column', 'description' );
