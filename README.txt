@@ -1,10 +1,11 @@
 === Plugin Notes Plus ===
 Contributors: jamiebergen
+Donate link: https://www.paypal.com/donate?business=WXSWW7YP6NE5Y&no_recurring=0&currency_code=USD
 Tags: plugins, plugin notes, memo
 Requires at least: 4.0
-Tested up to: 5.6.1
+Tested up to: 5.7.2
 Requires PHP: 5.6
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +96,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 
 == Changelog ==
 
+= 1.2.5 =
+* Fixed: PHP warning caused by deprecated usage of wp_localize_script. Thanks to @brianhenryie for finding this.
+
 = 1.2.4 =
 * Added: Option to display notes beneath plugin description. Thanks to @antipole for the suggestion.
 
@@ -130,6 +134,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.5 =
+This version fixes a PHP warning that happens when upgrading to WordPress 5.7.
 
 = 1.2.4 =
 This version adds a filter so that the user can move notes beneath the plugin description if desired.
