@@ -109,7 +109,7 @@ class Plugin_Notes_Plus_Admin {
 
 		if ( $hook_suffix == 'update-core.php' ) {
 			$updates = $this->get_notes_for_plugin_updates_page();
-			$updates_json_str = json_encode( $updates );
+			$updates_json_str = array( json_encode( $updates ) );
 			$labels = array (
 				'col_title' => esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() ),
 				'no_note' => esc_html__( 'No Plugin Notes', $this->plugin->get_plugin_name() ),

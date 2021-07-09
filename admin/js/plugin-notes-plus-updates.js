@@ -8,7 +8,7 @@
 
         $('#update-plugins-table thead tr, #update-plugins-table tfoot tr').append( '<td id="pnp_plugin_notes_col">'+ labels.col_title +'</td>' );
 
-        var notes_for_plugin_updates = $.parseJSON(updates);
+        var notes_for_plugin_updates = JSON.parse(updates);
 
         var i = 0;
 
