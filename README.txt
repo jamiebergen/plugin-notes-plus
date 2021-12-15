@@ -3,9 +3,9 @@ Contributors: jamiebergen
 Donate link: https://www.paypal.com/donate?business=WXSWW7YP6NE5Y&no_recurring=0&currency_code=USD
 Tags: plugins, plugin notes, memo
 Requires at least: 4.0
-Tested up to: 5.7.2
+Tested up to: 5.8.2
 Requires PHP: 5.6
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,7 @@ Features
 * Notes are added and updated via Ajax, avoiding slow page reloads.
 * Notes also display on the WordPress Updates page for any plugins that need to be updated.
 * A filter is provided if you would like to display notes beneath the plugin description instead of in a separate column.
+* A filter is available to selectively hide or display plugin notes in the admin.
 
 == Installation ==
 1. You can either install the plugin via the Plugins directory from within your WordPress install, or you can upload the files manually to your server by extracting the .zip file and placing its contents in the /wp-content/plugins/ directory.
@@ -90,11 +91,29 @@ Plugin notes and note metadata are stored in a custom table whose name ends in `
 
 Each site within a multisite install maintains its own plugin notes. Additionally, the superadmin can maintain their own plugin notes.
 
+= Can I hide plugin notes from specific users? =
+
+As of version 1.2.6, you can use the filter plugin-notes-plus_hide_notes to show or hide plugin notes.
+
+Here is an example of a snippet that hides plugin notes from a specfic user. It can be added to your child theme's functions.php. Without this, plugin notes are displayed by default to all users who can view the plugins page.
+
+`function pnp_hide_notes( $hide_notes ) {
+
+	// logic to set $hide_notes to TRUE or FALSE
+
+	return $hide_notes;
+
+}
+add_filter( 'plugin-notes-plus_hide_notes', 'pnp_hide_notes' );`
+
 == Screenshots ==
 
 1. Upon activating the plugin, you will see a new column on the Plugins page that enables you to add, edit, or delete notes about the plugins you have installed on a particular site.
 
 == Changelog ==
+
+= 1.2.6 =
+* Added: Option to selectively hide or display plugin notes. Thanks to @garconis for the suggestion.
 
 = 1.2.5 =
 * Fixed: PHP warning caused by deprecated usage of wp_localize_script. Thanks to @brianhenryie for finding this.
@@ -134,6 +153,9 @@ Each site within a multisite install maintains its own plugin notes. Additionall
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.6 =
+This version adds a filter to hide or display plugin notes.
 
 = 1.2.5 =
 This version fixes a PHP warning that happens when upgrading to WordPress 5.7.
