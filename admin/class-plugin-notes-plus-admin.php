@@ -109,14 +109,17 @@ class Plugin_Notes_Plus_Admin {
 
 		if ( $hook_suffix == 'update-core.php' ) {
 			$updates = $this->get_notes_for_plugin_updates_page();
-			$updates_json_str = array( json_encode( $updates ) );
-			$labels = array (
-				'col_title' => esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() ),
-				'no_note' => esc_html__( 'No Plugin Notes', $this->plugin->get_plugin_name() ),
-			);
-			wp_enqueue_script( 'pnp_updates_script', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-updates.js', array( 'jquery' ), $this->plugin->get_version(), false );
-			wp_localize_script( 'pnp_updates_script', 'updates', $updates_json_str );
-			wp_localize_script( 'pnp_updates_script', 'labels', $labels );
+
+			if ( $updates ) {
+				$updates_json_str = array( json_encode( $updates ) );
+				$labels = array (
+					'col_title' => esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() ),
+					'no_note' => esc_html__( 'No Plugin Notes', $this->plugin->get_plugin_name() ),
+				);
+				wp_enqueue_script( 'pnp_updates_script', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-updates.js', array( 'jquery' ), $this->plugin->get_version(), false );
+				wp_localize_script( 'pnp_updates_script', 'updates', $updates_json_str );
+				wp_localize_script( 'pnp_updates_script', 'labels', $labels );
+			}
 		}
 	}
 
@@ -126,7 +129,15 @@ class Plugin_Notes_Plus_Admin {
 	 * @since    1.0.0
 	 */
 	public function add_plugin_notes_column( $columns ) {
-		$columns['pnp_plugin_notes_col'] =  esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() );
+
+		$pnp_hide_notes = FALSE;
+
+		$pnp_hide_notes = apply_filters( 'plugin-notes-plus_hide_notes', $pnp_hide_notes );
+
+		if ( ! $pnp_hide_notes ) {
+			$columns['pnp_plugin_notes_col'] =  esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() );
+		}
+
 		return $columns;
 	}
 
@@ -170,6 +181,14 @@ class Plugin_Notes_Plus_Admin {
 	 * @since    1.2.4
 	 */
 	public function display_plugin_note_desc( $plugin_meta, $plugin_file, $plugin_data, $context ) {
+
+		$pnp_hide_notes = FALSE;
+
+		$pnp_hide_notes = apply_filters( 'plugin-notes-plus_hide_notes', $pnp_hide_notes );
+
+		if ( $pnp_hide_notes ) {
+			return $plugin_meta;
+		}
 
 		$plugin_unique_id = $this->get_plugin_unique_id( $plugin_file );
 		$plugin_note_obj = new Plugin_Notes_Plus_The_Note( $plugin_unique_id );
@@ -279,7 +298,11 @@ class Plugin_Notes_Plus_Admin {
 		require_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
 		$plugins = get_plugin_updates();
 
-		if ( empty( $plugins ) ) {
+		$pnp_hide_notes = FALSE;
+
+		$pnp_hide_notes = apply_filters( 'plugin-notes-plus_hide_notes', $pnp_hide_notes );
+
+		if ( empty( $plugins ) || $pnp_hide_notes ) {
 			return $notes_array;
 		}
 
