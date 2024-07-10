@@ -14,26 +14,26 @@
 
 if ( current_user_can('activate_plugins') ) {
     ?>
-    <div class="pnp-wrapper" id="<?php echo $plugin_unique_id_sanitized; ?>" data-pluginfile="<?php echo $plugin_unique_id; ?>">
+    <div class="pnp-wrapper" id="<?php echo esc_html( $plugin_unique_id_sanitized ) ?>" data-pluginfile="<?php echo esc_html( $plugin_unique_id ); ?>">
 
         <?php
         if ( $the_plugin_notes ) {
             foreach ( $the_plugin_notes as $note_index => $the_plugin_note ) { ?>
-                <div class="pnp-show-note-wrapper" id="<?php echo $plugin_unique_id_sanitized . '_' . $note_index; ?>">
+                <div class="pnp-show-note-wrapper" id="<?php echo esc_html( $plugin_unique_id_sanitized . '_' . $note_index ); ?>">
                     <div class="pnp-plugin-note">
-                        <span class="dashicons <?php echo $the_plugin_note['icon'] ?>"></span><?php echo nl2br( $the_plugin_note[ 'note' ] ); ?>
-                        <p class="pnp-note-meta"><?php echo $the_plugin_note['user'] ?> | <span class="pnp-note-time"></span></p>
+                        <span class="dashicons <?php echo esc_html( $the_plugin_note['icon'] ) ?>"></span><?php echo nl2br( esc_html( $the_plugin_note[ 'note' ] ) ); ?>
+                        <p class="pnp-note-meta"><?php echo esc_html( $the_plugin_note['user'] ) ?> | <span class="pnp-note-time"></span></p>
                     </div>
                     <a href="#" class="pnp-edit-note"><?php esc_html_e( 'Edit', $this->plugin->get_plugin_name() ) ?></a> |
                     <a href="#" class="pnp-delete-note"><?php esc_html_e( 'Delete', $this->plugin->get_plugin_name() ) ?></a>
                     <span class="pnp-spin dashicons dashicons-update"></span>
                 </div>
                 <script>
-                    registerPluginNote( "<?php echo $plugin_unique_id_sanitized; ?>",
-                                        "<?php echo $note_index; ?>",
-                                        "<?php echo str_replace("\n", '\n', addslashes($the_plugin_note['note'])); ?>",
-                                        "<?php echo $the_plugin_note['icon']; ?>",
-                                        "<?php echo $the_plugin_note['time']; ?>",
+                    registerPluginNote( "<?php echo esc_html( $plugin_unique_id_sanitized ); ?>",
+                                        "<?php echo esc_html( $note_index ); ?>",
+                                        "<?php echo esc_html( str_replace("\n", '\n', addslashes($the_plugin_note['note'])) ); ?>",
+                                        "<?php echo esc_html( $the_plugin_note['icon'] ); ?>",
+                                        "<?php echo esc_html( $the_plugin_note['time'] ); ?>",
                     );
 
                 </script>
@@ -48,9 +48,9 @@ if ( current_user_can('activate_plugins') ) {
                 <label>
                     <?php esc_html_e( 'Note type:', $this->plugin->get_plugin_name() ) ?>
                     <span class="view-icon"></span>
-                    <select id="<?php echo $plugin_unique_id_sanitized; ?>" class="select-dashicon-for-note">
+                    <select id="<?php echo esc_html( $plugin_unique_id_sanitized ); ?>" class="select-dashicon-for-note">
                         <?php foreach ( $icon_options_array as $icon_class => $icon_name ) {
-                            echo '<option value="'. $icon_class . '">' . esc_html__( $icon_name, $this->plugin->get_plugin_name() ) . '</option>';
+                            echo '<option value="'. esc_html( $icon_class ) . '">' . esc_html__( $icon_name, $this->plugin->get_plugin_name() ) . '</option>';
                         } ?>
                     </select>
                 </label>
