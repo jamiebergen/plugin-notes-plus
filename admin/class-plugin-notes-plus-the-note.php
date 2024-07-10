@@ -5,7 +5,7 @@
  * Defines functions to add, edit, and delete plugin notes.
  * Also defines functions to retrieve note(s) for a specific plugin.
  *
- * @link       https://jamiebergen.com/
+ * @link       https://github.com/jamiebergen
  * @since      1.0.0
  *
  * @package    Plugin_Notes_Plus

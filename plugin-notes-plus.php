@@ -8,17 +8,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://jamiebergen.com/
+ * @link              https://github.com/jamiebergen
  * @since             1.0.0
  * @package           Plugin_Notes_Plus
  *
  * @wordpress-plugin
  * Plugin Name:       Plugin Notes Plus
- * Plugin URI:        https://jamiebergen.com/plugin-notes-plus/
+ * Plugin URI:        https://github.com/jamiebergen/plugin-notes-plus
  * Description:       Adds a column for plugin notes.
  * Version:           1.2.6
  * Author:            Jamie Bergen
- * Author URI:        https://jamiebergen.com/
+ * Author URI:        https://github.com/jamiebergen
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       plugin-notes-plus

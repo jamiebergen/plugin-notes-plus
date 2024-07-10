@@ -5,7 +5,7 @@
  *
  * This file is used to markup the admin-facing aspects of the plugin.
  *
- * @link       https://jamiebergen.com/
+ * @link       https://github.com/jamiebergen
  * @since      1.0.0
  *
  * @package    Plugin_Notes_Plus

@@ -7,7 +7,7 @@
  * Defines functions for adding a custom column and rendering plugin notes.
  * Defines ajax handlers for adding and deleting notes.
  *
- * @link       https://jamiebergen.com/
+ * @link       https://github.com/jamiebergen
  * @since      1.0.0
  *
  * @package    Plugin_Notes_Plus
