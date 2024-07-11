@@ -5,7 +5,7 @@ Tags: plugins, plugin notes, memo
 Requires at least: 4.0
 Tested up to: 6.5.5
 Requires PHP: 5.6
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,9 @@ add_filter( 'plugin-notes-plus_hide_notes', 'pnp_hide_notes' );`
 
 == Changelog ==
 
+= 1.2.7 =
+* Fixed: Cross site scripting (XSS) vulnerability related to icon rendering.
+
 = 1.2.6 =
 * Added: Option to selectively hide or display plugin notes. Thanks to @garconis for the suggestion.
 
@@ -153,6 +156,9 @@ add_filter( 'plugin-notes-plus_hide_notes', 'pnp_hide_notes' );`
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.7 =
+This version fixes a security issue.
 
 = 1.2.6 =
 This version adds a filter to hide or display plugin notes.
