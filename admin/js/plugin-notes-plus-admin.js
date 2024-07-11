@@ -16,8 +16,14 @@ function registerPluginNote( pluginIdSanitized, noteDbId, noteContent, noteIcon,
 
     jQuery('#' + noteCssId + ' .pnp-note-time').html(formattedDate);
 
+    let unescapeNote = noteContent.replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+
     pluginNotes[noteCssId] = {
-        note: noteContent,
+        note: unescapeNote,
         icon: noteIcon
     };
 }

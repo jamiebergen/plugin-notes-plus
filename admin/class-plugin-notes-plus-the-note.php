@@ -59,6 +59,10 @@ class Plugin_Notes_Plus_The_Note {
 		$this->allowed_tags = apply_filters( 'plugin-notes-plus_allowed_html', $this->allowed_tags );
 	}
 
+	public function get_allowed_tags() {
+		return $this->allowed_tags;
+	}
+
 	/**
 	 * Retrieve the plugin note or notes from the options table
 	 * Used for migration from options to custom table
@@ -96,7 +100,7 @@ class Plugin_Notes_Plus_The_Note {
 		$result = $wpdb->get_row( $wpdb->prepare(
 			"SELECT * FROM $table_name WHERE ID = %d;",
 			$note_id
-		) );
+		) ); //db call ok; no-cache ok
 
 		$note_array = array();
 		$note_array['note'] = $this->process_plugin_note( $result->note_content );
@@ -122,7 +126,7 @@ class Plugin_Notes_Plus_The_Note {
 		$results = $wpdb->get_results( $wpdb->prepare(
 			"SELECT * FROM $table_name WHERE plugin_id LIKE %s;",
 			$this->plugin_unique_id
-		) );
+		) ); //db call ok; no-cache ok
 
 		foreach( $results as $key => $row ) {
 
@@ -161,7 +165,7 @@ class Plugin_Notes_Plus_The_Note {
 				'user_name' => $username,
 				'time' => $note_time,
 			)
-		);
+		); //db call ok
 
 		return $wpdb->insert_id;
 	}
@@ -189,7 +193,7 @@ class Plugin_Notes_Plus_The_Note {
 				'user_name' => $username,
 				'time' => $note_time,
 			)
-		);
+		); //db call ok
 
 		return $wpdb->insert_id;
 	}
@@ -224,7 +228,7 @@ class Plugin_Notes_Plus_The_Note {
 				'%d',	// time
 			),
 			array( '%d' )
-		);
+		); //db call ok; no-cache ok
 
 		return $note_id;
 	}

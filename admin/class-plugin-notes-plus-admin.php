@@ -170,6 +170,8 @@ class Plugin_Notes_Plus_Admin {
 			$icon_options_array = apply_filters( 'plugin-notes-plus_icon_options', self::$icon_options );
 			$plugin_unique_id_sanitized = preg_replace( '/[^a-zA-Z0-9_-]/', '-', 'pnp_' . $plugin_unique_id );
 
+			$allowed_tags = $plugin_note_obj->get_allowed_tags();
+
 			include( 'partials/plugin-note-markup.php' );
 
 		}
@@ -198,6 +200,8 @@ class Plugin_Notes_Plus_Admin {
 
 		$icon_options_array = apply_filters( 'plugin-notes-plus_icon_options', self::$icon_options );
 		$plugin_unique_id_sanitized = preg_replace( '/[^a-zA-Z0-9_-]/', '-', 'pnp_' . $plugin_unique_id );
+
+		$allowed_tags = $plugin_note_obj->get_allowed_tags();
 
 		include( 'partials/plugin-note-markup.php' );
 
@@ -262,7 +266,7 @@ class Plugin_Notes_Plus_Admin {
 		global $wpdb;
 		$table_name = $wpdb->prefix . $this->plugin->get_table_name();
 
-		$wpdb->delete( $table_name, array( 'id' => $index ) );
+		$wpdb->delete( $table_name, array( 'id' => $index ) ); //db call ok; no-cache ok
 
 	}
 
