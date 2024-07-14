@@ -2,7 +2,7 @@
 Contributors: jamiebergen
 Donate link: https://www.paypal.com/donate?business=WXSWW7YP6NE5Y&no_recurring=0&currency_code=USD
 Tags: plugins, plugin notes, memo
-Requires at least: 4.0
+Requires at least: 6.2
 Tested up to: 6.5.5
 Requires PHP: 5.6
 Stable tag: 1.2.7

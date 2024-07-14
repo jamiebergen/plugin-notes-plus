@@ -97,10 +97,11 @@ class Plugin_Notes_Plus_The_Note {
 		global $wpdb;
 		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
-		$result = $wpdb->get_row( $wpdb->prepare(
-			"SELECT * FROM $table_name WHERE ID = %d;",
+		$result = $wpdb->get_row( $wpdb->prepare( //db call ok; no-cache ok
+			"SELECT * FROM %i WHERE ID = %d;",
+			$table_name,
 			$note_id
-		) ); //db call ok; no-cache ok
+		) );
 
 		$note_array = array();
 		$note_array['note'] = $this->process_plugin_note( $result->note_content );
@@ -123,10 +124,11 @@ class Plugin_Notes_Plus_The_Note {
 		global $wpdb;
 		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
-		$results = $wpdb->get_results( $wpdb->prepare(
-			"SELECT * FROM $table_name WHERE plugin_id LIKE %s;",
+		$results = $wpdb->get_results( $wpdb->prepare(  //db call ok; no-cache ok
+			"SELECT * FROM %i WHERE plugin_id LIKE %s;",
+			$table_name,
 			$this->plugin_unique_id
-		) ); //db call ok; no-cache ok
+		) );
 
 		foreach( $results as $key => $row ) {
 
@@ -156,7 +158,7 @@ class Plugin_Notes_Plus_The_Note {
 		global $wpdb;
 		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
-		$wpdb->insert(
+		$wpdb->insert(  //db call ok
 			$table_name,
 			array(
 				'plugin_id' => $new_id,
@@ -165,7 +167,7 @@ class Plugin_Notes_Plus_The_Note {
 				'user_name' => $username,
 				'time' => $note_time,
 			)
-		); //db call ok
+		);
 
 		return $wpdb->insert_id;
 	}
@@ -184,7 +186,7 @@ class Plugin_Notes_Plus_The_Note {
 		global $wpdb;
 		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
-		$wpdb->insert(
+		$wpdb->insert(  //db call ok
 			$table_name,
 			array(
 				'plugin_id' => $this->plugin_unique_id,
@@ -193,7 +195,7 @@ class Plugin_Notes_Plus_The_Note {
 				'user_name' => $username,
 				'time' => $note_time,
 			)
-		); //db call ok
+		);
 
 		return $wpdb->insert_id;
 	}
@@ -212,7 +214,7 @@ class Plugin_Notes_Plus_The_Note {
 		global $wpdb;
 		$table_name = $wpdb->prefix . Plugin_Notes_Plus::get_table_name();
 
-		$wpdb->update(
+		$wpdb->update( //db call ok; no-cache ok
 			$table_name,
 			array(
 				'note_content'  => $processed_note,	// string
@@ -228,7 +230,7 @@ class Plugin_Notes_Plus_The_Note {
 				'%d',	// time
 			),
 			array( '%d' )
-		); //db call ok; no-cache ok
+		);
 
 		return $note_id;
 	}
