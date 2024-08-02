@@ -219,6 +219,11 @@ class Plugin_Notes_Plus_Admin {
 		// The $_REQUEST contains all the data sent via ajax
 		if ( isset($_REQUEST) ) {
 
+			// Check that user has correct permissions
+			if ( ! current_user_can( 'activate_plugins' ) ) {
+				die();
+			}
+
 			// Check nonce and die if any funny business is detected
 			check_ajax_referer( 'pnp_add_plugin_note_form_nonce', 'security' );
 
@@ -279,6 +284,11 @@ class Plugin_Notes_Plus_Admin {
 
 		// The $_REQUEST contains all the data sent via ajax
 		if ( isset($_REQUEST) ) {
+
+			// Check that user has correct permissions
+			if ( ! current_user_can( 'activate_plugins' ) ) {
+				die();
+			}
 
 			// Check nonce and die if any funny business is detected
 			check_ajax_referer( 'pnp_add_plugin_note_form_nonce', 'security' );
