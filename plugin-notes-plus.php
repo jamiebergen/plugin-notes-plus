@@ -16,7 +16,7 @@
  * Plugin Name:       Plugin Notes Plus
  * Plugin URI:        https://github.com/jamiebergen/plugin-notes-plus
  * Description:       Adds a column for plugin notes.
- * Version:           1.2.8
+ * Version:           1.2.9
  * Author:            Jamie Bergen
  * Author URI:        https://github.com/jamiebergen
  * License:           GPL-2.0+
@@ -34,7 +34,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Current plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  */
-define( 'PLUGIN_NOTES_PLUS_VERSION', '1.2.8' );
+define( 'PLUGIN_NOTES_PLUS_VERSION', '1.2.9' );
 
 /**
  * The code that runs during plugin activation.

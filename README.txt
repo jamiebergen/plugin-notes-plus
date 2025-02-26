@@ -3,9 +3,9 @@ Contributors: jamiebergen
 Donate link: https://www.paypal.com/donate?business=WXSWW7YP6NE5Y&no_recurring=0&currency_code=USD
 Tags: plugins, plugin notes, memo
 Requires at least: 6.2
-Tested up to: 6.6.1
+Tested up to: 6.7.2
 Requires PHP: 5.6
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,9 @@ add_filter( 'plugin-notes-plus_hide_notes', 'pnp_hide_notes' );`
 
 == Changelog ==
 
+= 1.2.9 =
+* Fixed: PHP warnings related to I18n.
+
 = 1.2.8 =
 * Fixed: Checking for user permission on ajax requests.
 
@@ -159,6 +162,9 @@ add_filter( 'plugin-notes-plus_hide_notes', 'pnp_hide_notes' );`
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.9 =
+This version fixes an issue related to translations.
 
 = 1.2.8 =
 This version fixes an issue related to user permissions.

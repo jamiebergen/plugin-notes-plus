@@ -34,7 +34,18 @@ class Plugin_Notes_Plus_Admin {
 	 * @access   public
 	 * @var      array    $icon_options
 	 */
-	public static $icon_options;
+	// public static $icon_options;
+
+	// public $icon_options = array(
+	// 	'dashicons-clipboard' => esc_html__( 'Note', 'plugin-notes-plus' ),
+	// 	'dashicons-info' => esc_html__( 'Info', 'plugin-notes-plus' ),
+	// 	'dashicons-admin-links' => esc_html__( 'Link', 'plugin-notes-plus' ),
+	// 	'dashicons-warning' => esc_html__( 'Warning', 'plugin-notes-plus' ),
+	// 	'dashicons-admin-network' => esc_html__( 'Key', 'plugin-notes-plus' ),
+	// 	'dashicons-yes' => esc_html__( 'Checkmark', 'plugin-notes-plus' ),
+	// 	'dashicons-money' => esc_html__( 'Money', 'plugin-notes-plus' ),
+	// );
+	
 
 	/**
 	 * Initialize the class and set its properties.
@@ -90,10 +101,10 @@ class Plugin_Notes_Plus_Admin {
 		$params = array (
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'ajax_nonce' => wp_create_nonce( 'pnp_add_plugin_note_form_nonce' ), // this is a unique token to prevent form hijacking
-			'edit_text' => esc_html__( 'Edit', $this->plugin->get_plugin_name() ),
-			'delete_text' => esc_html__( 'Delete', $this->plugin->get_plugin_name() ),
-			'confirm_delete' => esc_html__( 'Are you sure you want to delete this note?', $this->plugin->get_plugin_name() ),
-			'needs_content' => esc_html__( 'The note must contain content.', $this->plugin->get_plugin_name() ),
+			'edit_text' => esc_html__( 'Edit', 'plugin-notes-plus' ),
+			'delete_text' => esc_html__( 'Delete', 'plugin-notes-plus' ),
+			'confirm_delete' => esc_html__( 'Are you sure you want to delete this note?', 'plugin-notes-plus' ),
+			'needs_content' => esc_html__( 'The note must contain content.', 'plugin-notes-plus' ),
 		);
 		wp_enqueue_script( 'pnp_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-admin.js', array( 'jquery' ), $this->plugin->get_version(), false );
 		wp_localize_script( 'pnp_ajax_handle', 'params', $params );
@@ -113,8 +124,8 @@ class Plugin_Notes_Plus_Admin {
 			if ( $updates ) {
 				$updates_json_str = array( json_encode( $updates ) );
 				$labels = array (
-					'col_title' => esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() ),
-					'no_note' => esc_html__( 'No Plugin Notes', $this->plugin->get_plugin_name() ),
+					'col_title' => esc_html__( 'Plugin Notes', 'plugin-notes-plus' ),
+					'no_note' => esc_html__( 'No Plugin Notes', 'plugin-notes-plus' ),
 				);
 				wp_enqueue_script( 'pnp_updates_script', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-updates.js', array( 'jquery' ), $this->plugin->get_version(), false );
 				wp_localize_script( 'pnp_updates_script', 'updates', $updates_json_str );
@@ -135,7 +146,7 @@ class Plugin_Notes_Plus_Admin {
 		$pnp_hide_notes = apply_filters( 'plugin-notes-plus_hide_notes', $pnp_hide_notes );
 
 		if ( ! $pnp_hide_notes ) {
-			$columns['pnp_plugin_notes_col'] =  esc_html__( 'Plugin Notes', $this->plugin->get_plugin_name() );
+			$columns['pnp_plugin_notes_col'] =  esc_html__( 'Plugin Notes', 'plugin-notes-plus' );
 		}
 
 		return $columns;
@@ -167,7 +178,17 @@ class Plugin_Notes_Plus_Admin {
 			$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
 			ksort($the_plugin_notes);
 
-			$icon_options_array = apply_filters( 'plugin-notes-plus_icon_options', self::$icon_options );
+			$icon_options = array(
+				'dashicons-clipboard' => esc_html__( 'Note', 'plugin-notes-plus' ),
+				'dashicons-info' => esc_html__( 'Info', 'plugin-notes-plus' ),
+				'dashicons-admin-links' => esc_html__( 'Link', 'plugin-notes-plus' ),
+				'dashicons-warning' => esc_html__( 'Warning', 'plugin-notes-plus' ),
+				'dashicons-admin-network' => esc_html__( 'Key', 'plugin-notes-plus' ),
+				'dashicons-yes' => esc_html__( 'Checkmark', 'plugin-notes-plus' ),
+				'dashicons-money' => esc_html__( 'Money', 'plugin-notes-plus' ),
+			);
+
+			$icon_options_array = apply_filters( 'plugin-notes-plus_icon_options', $icon_options );
 			$plugin_unique_id_sanitized = preg_replace( '/[^a-zA-Z0-9_-]/', '-', 'pnp_' . $plugin_unique_id );
 
 			$allowed_tags = $plugin_note_obj->get_allowed_tags();
@@ -198,7 +219,17 @@ class Plugin_Notes_Plus_Admin {
 		$the_plugin_notes = $plugin_note_obj->get_plugin_notes();
 		ksort($the_plugin_notes);
 
-		$icon_options_array = apply_filters( 'plugin-notes-plus_icon_options', self::$icon_options );
+		$icon_options = array(
+			'dashicons-clipboard' => esc_html__( 'Note', 'plugin-notes-plus' ),
+			'dashicons-info' => esc_html__( 'Info', 'plugin-notes-plus' ),
+			'dashicons-admin-links' => esc_html__( 'Link', 'plugin-notes-plus' ),
+			'dashicons-warning' => esc_html__( 'Warning', 'plugin-notes-plus' ),
+			'dashicons-admin-network' => esc_html__( 'Key', 'plugin-notes-plus' ),
+			'dashicons-yes' => esc_html__( 'Checkmark', 'plugin-notes-plus' ),
+			'dashicons-money' => esc_html__( 'Money', 'plugin-notes-plus' ),
+		);
+
+		$icon_options_array = apply_filters( 'plugin-notes-plus_icon_options', $icon_options );
 		$plugin_unique_id_sanitized = preg_replace( '/[^a-zA-Z0-9_-]/', '-', 'pnp_' . $plugin_unique_id );
 
 		$allowed_tags = $plugin_note_obj->get_allowed_tags();
@@ -333,12 +364,12 @@ class Plugin_Notes_Plus_Admin {
 	}
 }
 
-Plugin_Notes_Plus_Admin::$icon_options = array(
-	'dashicons-clipboard' => esc_html__( 'Note', Plugin_Notes_Plus::get_plugin_name() ),
-	'dashicons-info' => esc_html__( 'Info', Plugin_Notes_Plus::get_plugin_name() ),
-	'dashicons-admin-links' => esc_html__( 'Link', Plugin_Notes_Plus::get_plugin_name() ),
-	'dashicons-warning' => esc_html__( 'Warning', Plugin_Notes_Plus::get_plugin_name() ),
-	'dashicons-admin-network' => esc_html__( 'Key', Plugin_Notes_Plus::get_plugin_name() ),
-	'dashicons-yes' => esc_html__( 'Checkmark', Plugin_Notes_Plus::get_plugin_name() ),
-	'dashicons-money' => esc_html__( 'Money', Plugin_Notes_Plus::get_plugin_name() ),
-);
+// Plugin_Notes_Plus_Admin::$icon_options = array(
+// 	'dashicons-clipboard' => esc_html__( 'Note', 'plugin-notes-plus' ),
+// 	'dashicons-info' => esc_html__( 'Info', 'plugin-notes-plus' ),
+// 	'dashicons-admin-links' => esc_html__( 'Link', 'plugin-notes-plus' ),
+// 	'dashicons-warning' => esc_html__( 'Warning', 'plugin-notes-plus' ),
+// 	'dashicons-admin-network' => esc_html__( 'Key', 'plugin-notes-plus' ),
+// 	'dashicons-yes' => esc_html__( 'Checkmark', 'plugin-notes-plus' ),
+// 	'dashicons-money' => esc_html__( 'Money', 'plugin-notes-plus' ),
+// );
