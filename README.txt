@@ -5,7 +5,7 @@ Tags: plugins, plugin notes, memo
 Requires at least: 6.2
 Tested up to: 6.7.2
 Requires PHP: 5.6
-Stable tag: 1.2.9
+Stable tag: 1.2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,9 @@ add_filter( 'plugin-notes-plus_hide_notes', 'pnp_hide_notes' );`
 
 == Changelog ==
 
+= 1.2.10 =
+* Fixed: Ajax conflict with WPML version 4.7.0 and up. Thanks to @ericmuc for bringing this to my attention.
+
 = 1.2.9 =
 * Fixed: PHP warnings related to I18n.
 
@@ -162,6 +165,9 @@ add_filter( 'plugin-notes-plus_hide_notes', 'pnp_hide_notes' );`
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2.10 =
+This version fixes a plugin conflict with WPML.
 
 = 1.2.9 =
 This version fixes an issue related to translations.
