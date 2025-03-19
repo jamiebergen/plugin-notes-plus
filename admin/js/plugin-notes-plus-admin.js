@@ -97,7 +97,7 @@ function registerPluginNote( pluginIdSanitized, noteDbId, noteContent, noteIcon,
 
             // Don't allow save with empty content
             if ($.trim(noteContent) === "") {
-                alert(params.needs_content);
+                alert(pnp_params.needs_content);
                 return false;
             }
 
@@ -122,14 +122,14 @@ function registerPluginNote( pluginIdSanitized, noteDbId, noteContent, noteIcon,
 
             // This does the ajax request
             $.ajax({
-                url: params.ajaxurl,
+                url: pnp_params.ajaxurl,
                 data: {
                     'action': 'pnp_add_response',
                     'note' : noteContent,
                     'icon' : noteIcon,
                     'noteId' : noteDbId, // will be '' if not in db yet
                     'pluginId' : pluginId,
-                    'security' : params.ajax_nonce
+                    'security' : pnp_params.ajax_nonce
                 },
                 success:function( response ) {
 
@@ -252,7 +252,7 @@ function editNote( noteToEdit, pluginIdSanitized, noteDbId ) {
 
 function deleteNote( noteCssId, noteDbId ) {
 
-    if (confirm(params.confirm_delete)) {
+    if (confirm(pnp_params.confirm_delete)) {
 
         // Show spinner
         var deleteLink = jQuery('#' + noteCssId + ' .pnp-delete-note');
@@ -261,11 +261,11 @@ function deleteNote( noteCssId, noteDbId ) {
 
         // This does the ajax request
         jQuery.ajax({
-            url: params.ajaxurl,
+            url: pnp_params.ajaxurl,
             data: {
                 'action': 'pnp_delete_response',
                 'noteId' : noteDbId,
-                'security' : params.ajax_nonce
+                'security' : pnp_params.ajax_nonce
             },
             success:function( data ) {
                 // This outputs the result of the ajax request
@@ -291,8 +291,8 @@ function singleNoteMarkup( note, icon, user, pluginIdSanitized, noteDbId ) {
     markup += note;
     markup += '<p class="pnp-note-meta">' + user + ' | <span class="pnp-note-time"></span></p>';
     markup += '</div>';
-    markup += '<a href="#" class="pnp-edit-note">' + params.edit_text + '</a> | ';
-    markup += '<a href="#" class="pnp-delete-note">' + params.delete_text + '</a>';
+    markup += '<a href="#" class="pnp-edit-note">' + pnp_params.edit_text + '</a> | ';
+    markup += '<a href="#" class="pnp-delete-note">' + pnp_params.delete_text + '</a>';
     markup += '<span class="pnp-spin dashicons dashicons-update"></span>';
     markup += '</div>';
 

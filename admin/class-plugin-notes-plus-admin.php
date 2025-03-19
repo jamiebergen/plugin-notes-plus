@@ -107,7 +107,7 @@ class Plugin_Notes_Plus_Admin {
 			'needs_content' => esc_html__( 'The note must contain content.', 'plugin-notes-plus' ),
 		);
 		wp_enqueue_script( 'pnp_ajax_handle', plugin_dir_url( __FILE__ ) . 'js/plugin-notes-plus-admin.js', array( 'jquery' ), $this->plugin->get_version(), false );
-		wp_localize_script( 'pnp_ajax_handle', 'params', $params );
+		wp_localize_script( 'pnp_ajax_handle', 'pnp_params', $params );
 
 		/**
 		 * Retrieve notes for plugins on updates page and send to JavaScript file
