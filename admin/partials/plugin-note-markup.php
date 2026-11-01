@@ -69,6 +69,6 @@ if ( current_user_can('activate_plugins') ) {
 }
 else {
     ?>
-    <p> <?php esc_html__( "You are not authorized to perform this operation.", 'plugin-notes-plus' ) ?> </p>
+    <p> <?php esc_html_e( "You are not authorized to perform this operation.", 'plugin-notes-plus' ) ?> </p>
     <?php
 }
